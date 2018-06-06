@@ -77,13 +77,14 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 .getReference()
                                                 .child("Users")
                                                 .child(genderButton.getText().toString())
-                                                .child(userID);
+                                                .child(userID)
+                                                .child("name");
                                         currentUserDB.setValue(name);
                                     } else {
                                         FirebaseAuthException e = (FirebaseAuthException) task.getException();
                                         Toast.makeText(RegistrationActivity.this,
                                                 "Registration Error: " + e.getMessage(),
-                                                Toast.LENGTH_SHORT);
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                 });
