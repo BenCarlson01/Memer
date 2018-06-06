@@ -1,12 +1,16 @@
 package com.bemad.bcarlson.meme_r;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
      * Uses Swipecards to get Tinder-like swiping motion
      */
 
+    private Button signOutButton;
     private ArrayList<String> al;
     private ArrayAdapter<String> arrayAdapter;
     private int i;
@@ -30,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        signOutButton = findViewById(R.id.signOut);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this, LoginRegistrationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
         al = new ArrayList<>();

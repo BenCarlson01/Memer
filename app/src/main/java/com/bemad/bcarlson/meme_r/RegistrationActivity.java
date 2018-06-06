@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,11 +17,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText emailText, passwordText;
+    private EditText nameText, emailText, passwordText;
     private Button registerButton;
+    private RadioGroup genderGroup;
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
@@ -42,6 +47,8 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         };
 
+        nameText = findViewById(R.id.name);
+        genderGroup = findViewById(R.id.gender);
         emailText = findViewById(R.id.email);
         passwordText = findViewById(R.id.password);
         registerButton = findViewById(R.id.register);
@@ -49,6 +56,13 @@ public class RegistrationActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int selectID = genderGroup.getCheckedRadioButtonId();
+                final RadioButton genderButton = findViewById(selectID);
+                if (genderButton.getText() == null) {
+                    return;
+                }
+
+                final String name = nameText.getText().toString();
                 final String email = emailText.getText().toString();
                 final String password = passwordText.getText().toString();
                 auth.createUserWithEmailAndPassword(email, password)
@@ -56,7 +70,15 @@ public class RegistrationActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-
+                                        String userID = auth.getCurrentUser().getUid();
+                                        DatabaseReference currentUserDB =
+                                                FirebaseDatabase
+                                                .getInstance()
+                                                .getReference()
+                                                .child("Users")
+                                                .child(genderButton.getText().toString())
+                                                .child(userID);
+                                        currentUserDB.setValue(name);
                                     } else {
                                         FirebaseAuthException e = (FirebaseAuthException) task.getException();
                                         Toast.makeText(RegistrationActivity.this,
