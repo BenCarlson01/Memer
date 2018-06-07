@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
      */
 
     private Button signOutButton;
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
-    private int i;
+    private Card cardsData[];
+    private MyArrayAdapter arrayAdapter;
+    private FirebaseAuth auth;
+
+    private ListView listItems;
+    private ArrayList<Card> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +58,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        auth = FirebaseAuth.getInstance();
+        String currentUID = auth.getCurrentUser().getUid();
+
         checkUserGender();
-        al = new ArrayList<>();
-//        al.add("php");
-//        al.add("c");
-//        al.add("python");
-//        al.add("java");
-//        al.add("html");
-//        al.add("c++");
-//        al.add("css");
-//        al.add("javascript");
+        rowItems = new ArrayList<>();
 
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
+        arrayAdapter = new MyArrayAdapter(this, R.layout.item, rowItems);
 
-        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        SwipeFlingAdapterView flingContainer = findViewById(R.id.frame);
 
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
+                rowItems.remove(0);
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -205,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.exists()) {
-                    al.add(dataSnapshot.child("name").getValue().toString());
+                    Card item = new Card(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString());
+                    rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
                 }
             }
@@ -237,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signOutMethod(View view) {
-        FirebaseAuth.getInstance().signOut();
+        auth.signOut();
         Intent intent = new Intent(MainActivity.this, LoginRegistrationActivity.class);
         startActivity(intent);
         finish();

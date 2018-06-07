@@ -1,7 +1,10 @@
 package com.bemad.bcarlson.meme_r;
 
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -80,6 +83,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         auth.removeAuthStateListener(firebaseAuthStateListener);
+    }
+
+    public void backPage(View view) {
+        Intent intent = new Intent(this, LoginRegistrationActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 
