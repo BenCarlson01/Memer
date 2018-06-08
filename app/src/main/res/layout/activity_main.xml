@@ -7,25 +7,26 @@
     tools:context="com.bemad.bcarlson.meme_r.MainActivity">
 
     <Button
-        android:id="@+id/signOut"
+        android:id="@+id/settings"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Sign Out 1"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:onClick="goToSettings"
+        android:text="Settings"
+        app:layout_constraintBottom_toTopOf="@+id/signOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/signOut"
         android:layout_width="367dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:onClick="signOutMethod"
-        android:text="Sign Out 2"
+        android:onClick="signOut"
+        android:text="Sign Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

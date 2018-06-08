@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
      * Uses Swipecards to get Tinder-like swiping motion
      */
 
-    private Button signOutButton;
     private Card cardsData[];
     private MyArrayAdapter arrayAdapter;
     private FirebaseAuth auth;
@@ -52,17 +51,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        signOutButton = findViewById(R.id.signOut);
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MainActivity.this, LoginRegistrationActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         usersDB = FirebaseDatabase
                 .getInstance()
@@ -337,10 +325,16 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 
-    public void signOutMethod(View view) {
+    public void signOut(View view) {
         auth.signOut();
         Intent intent = new Intent(MainActivity.this, LoginRegistrationActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void goToSettings(View view) {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        intent.putExtra("gender", gender);
+        startActivity(intent);
     }
 }

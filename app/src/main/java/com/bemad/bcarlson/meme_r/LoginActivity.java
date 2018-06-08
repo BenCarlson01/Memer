@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText emailText, passwordText;
+    private EditText emailField, passwordField;
     private Button loginButton;
 
     private FirebaseAuth auth;
@@ -45,15 +45,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        emailText = findViewById(R.id.email);
-        passwordText = findViewById(R.id.password);
+        emailField = findViewById(R.id.email);
+        passwordField = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String email = emailText.getText().toString();
-                final String password = passwordText.getText().toString();
+                final String email = emailField.getText().toString();
+                final String password = passwordField.getText().toString();
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override

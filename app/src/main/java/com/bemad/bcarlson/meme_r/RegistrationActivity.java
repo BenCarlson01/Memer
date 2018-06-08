@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText nameText, emailText, passwordText;
+    private EditText nameField, emailField, passwordField;
     private Button registerButton;
     private RadioGroup genderGroup;
 
@@ -47,10 +47,10 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         };
 
-        nameText = findViewById(R.id.name);
+        nameField = findViewById(R.id.name);
         genderGroup = findViewById(R.id.gender);
-        emailText = findViewById(R.id.email);
-        passwordText = findViewById(R.id.password);
+        emailField = findViewById(R.id.email);
+        passwordField = findViewById(R.id.password);
         registerButton = findViewById(R.id.register);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -62,9 +62,9 @@ public class RegistrationActivity extends AppCompatActivity {
                     return;
                 }
 
-                final String name = nameText.getText().toString();
-                final String email = emailText.getText().toString();
-                final String password = passwordText.getText().toString();
+                final String name = nameField.getText().toString();
+                final String email = emailField.getText().toString();
+                final String password = passwordField.getText().toString();
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
