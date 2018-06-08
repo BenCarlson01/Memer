@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -38,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private Card cardsData[];
     private MyArrayAdapter arrayAdapter;
     private FirebaseAuth auth;
-    private String currentUID;
     private DatabaseReference usersDB;
+
+    private String currentUID;
+    private String gender;
+    private String preferredGender;
 
     private ListView listItems;
     private ArrayList<Card> rowItems;
@@ -128,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                         .child("dislike")
                         .child(currentUID)
                         .removeValue();
+                isMatch(userID);
                 makeToast(MainActivity.this, "Like!");
             }
 
@@ -157,7 +162,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String preferredGender;
+    private void isMatch(String userID) {
+        DatabaseReference connectionDB = usersDB
+                .child(gender)
+                .child(currentUID)
+                .child("connections")
+                .child("like")
+                .child(userID);
+        connectionDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    makeToast(MainActivity.this, "New Match!");
+                    usersDB.child(preferredGender)
+                            .child(dataSnapshot.getKey())
+                            .child("connections")
+                            .child("matches")
+                            .child(currentUID)
+                            .setValue(true);
+                    usersDB.child(gender)
+                            .child(currentUID)
+                            .child("connections")
+                            .child("matches")
+                            .child(dataSnapshot.getKey())
+                            .setValue(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     public void checkUserGender() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -171,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getKey().equals(user.getUid())) {
+                    gender = "Male";
                     preferredGender = "Female";
                     getpreferredGenderUsers();
                 }
@@ -206,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getKey().equals(user.getUid())) {
+                    gender = "Female";
                     preferredGender = "Male";
                     getpreferredGenderUsers();
                 }
@@ -252,7 +292,9 @@ public class MainActivity extends AppCompatActivity {
                     Card item = new Card(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString());
                     rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
-                } else if (dataSnapshot.exists()) {
+                }
+                //Delete this "else if" if you only want to see each thing once
+                else if (dataSnapshot.exists()) {
                     if (dataSnapshot.child("connections")
                             .child("like")
                             .hasChild(currentUID)) {
