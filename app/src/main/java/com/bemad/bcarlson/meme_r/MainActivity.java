@@ -277,9 +277,13 @@ public class MainActivity extends AppCompatActivity {
                         && !dataSnapshot.child("connections")
                                 .child("like")
                                 .hasChild(currentUID)) {
+                    String profileImgUrl = "default";
+                    if (!dataSnapshot.child("profileImgUrl").equals("default")) {
+                        profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
+                    }
                     Card item = new Card(dataSnapshot.getKey(),
                             dataSnapshot.child("name").getValue().toString(),
-                            dataSnapshot.child("profileImgUrl").getValue().toString());
+                            profileImgUrl);
                     rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -288,15 +292,23 @@ public class MainActivity extends AppCompatActivity {
                     if (dataSnapshot.child("connections")
                             .child("like")
                             .hasChild(currentUID)) {
+                        String profileImgUrl = "default";
+                        if (!dataSnapshot.child("profileImgUrl").equals("default")) {
+                            profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
+                        }
                         Card item = new Card(dataSnapshot.getKey(),
                                 "Liked:" + dataSnapshot.child("name").getValue().toString(),
-                                dataSnapshot.child("profileImgUrl").getValue().toString());
+                                profileImgUrl);
                         rowItems.add(item);
                         arrayAdapter.notifyDataSetChanged();
                     } else {
+                        String profileImgUrl = "default";
+                        if (!dataSnapshot.child("profileImgUrl").equals("default")) {
+                            profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
+                        }
                         Card item = new Card(dataSnapshot.getKey(),
                                 "Disliked:" + dataSnapshot.child("name").getValue().toString(),
-                                dataSnapshot.child("profileImgUrl").getValue().toString());
+                                profileImgUrl);
                         rowItems.add(item);
                         arrayAdapter.notifyDataSetChanged();
                     }

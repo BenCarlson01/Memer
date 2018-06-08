@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText nameField, emailField, passwordField;
@@ -77,9 +79,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 .getReference()
                                                 .child("Users")
                                                 .child(genderButton.getText().toString())
-                                                .child(userID)
-                                                .child("name");
-                                        currentUserDB.setValue(name);
+                                                .child(userID);
+                                        HashMap<String, Object> info = new HashMap<>();
+                                        info.put("name", name);
+                                        info.put("profileImgUrl", "default");
+                                        currentUserDB.setValue(info);
                                     } else {
                                         FirebaseAuthException e = (FirebaseAuthException) task.getException();
                                         Toast.makeText(RegistrationActivity.this,
