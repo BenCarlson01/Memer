@@ -138,7 +138,6 @@ public class SettingsActivity extends AppCompatActivity {
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! First");
                     finish();
                 }
             });
@@ -148,7 +147,6 @@ public class SettingsActivity extends AppCompatActivity {
                     filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Second");
                             Uri downloadUrl = uri;
                             HashMap<String, Object> info = new HashMap<>();
                             info.put("profileImgUrl", downloadUrl.toString());

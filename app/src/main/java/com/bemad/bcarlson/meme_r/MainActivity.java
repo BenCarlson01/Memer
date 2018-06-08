@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.getKey().equals(user.getUid())) {
                     gender = "Male";
                     preferredGender = "Female";
-                    getpreferredGenderUsers();
+                    getPreferredGenderUsers();
                 }
             }
 
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.getKey().equals(user.getUid())) {
                     gender = "Female";
                     preferredGender = "Male";
-                    getpreferredGenderUsers();
+                    getPreferredGenderUsers();
                 }
             }
 
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getpreferredGenderUsers() {
+    public void getPreferredGenderUsers() {
         DatabaseReference preferredGenderDB = FirebaseDatabase
                 .getInstance()
                 .getReference()
@@ -277,7 +277,9 @@ public class MainActivity extends AppCompatActivity {
                         && !dataSnapshot.child("connections")
                                 .child("like")
                                 .hasChild(currentUID)) {
-                    Card item = new Card(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString());
+                    Card item = new Card(dataSnapshot.getKey(),
+                            dataSnapshot.child("name").getValue().toString(),
+                            dataSnapshot.child("profileImgUrl").getValue().toString());
                     rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -287,12 +289,14 @@ public class MainActivity extends AppCompatActivity {
                             .child("like")
                             .hasChild(currentUID)) {
                         Card item = new Card(dataSnapshot.getKey(),
-                                "Liked:\n" + dataSnapshot.child("name").getValue().toString());
+                                "Liked:" + dataSnapshot.child("name").getValue().toString(),
+                                dataSnapshot.child("profileImgUrl").getValue().toString());
                         rowItems.add(item);
                         arrayAdapter.notifyDataSetChanged();
                     } else {
                         Card item = new Card(dataSnapshot.getKey(),
-                                "Disliked:\n" + dataSnapshot.child("name").getValue().toString());
+                                "Disliked:" + dataSnapshot.child("name").getValue().toString(),
+                                dataSnapshot.child("profileImgUrl").getValue().toString());
                         rowItems.add(item);
                         arrayAdapter.notifyDataSetChanged();
                     }
