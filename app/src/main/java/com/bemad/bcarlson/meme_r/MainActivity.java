@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private Card cardsData[];
     private MyArrayAdapter arrayAdapter;
     private FirebaseAuth auth;
+    private String currentUID;
+    private DatabaseReference usersDB;
 
     private ListView listItems;
     private ArrayList<Card> rowItems;
@@ -58,8 +60,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        usersDB = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Users");
         auth = FirebaseAuth.getInstance();
-        String currentUID = auth.getCurrentUser().getUid();
+        currentUID = auth.getCurrentUser().getUid();
 
         checkUserGender();
         rowItems = new ArrayList<>();
@@ -78,17 +84,51 @@ public class MainActivity extends AppCompatActivity {
                 arrayAdapter.notifyDataSetChanged();
             }
 
+            /**
+             * Left swipe means dislike
+             */
             @Override
             public void onLeftCardExit(Object dataObject) {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                makeToast(MainActivity.this, "Left!");
+                Card card = (Card) dataObject;
+                String userID = card.getUserID();
+                usersDB.child(preferredGender)
+                        .child(userID)
+                        .child("connections")
+                        .child("like")
+                        .child(currentUID)
+                        .removeValue();
+                usersDB.child(preferredGender)
+                        .child(userID)
+                        .child("connections")
+                        .child("dislike")
+                        .child(currentUID)
+                        .setValue(true);
+                makeToast(MainActivity.this, "Dislike!");
             }
 
+            /**
+             * Right swipe means like
+             */
             @Override
             public void onRightCardExit(Object dataObject) {
-                makeToast(MainActivity.this, "Right!");
+                Card card = (Card) dataObject;
+                String userID = card.getUserID();
+                usersDB.child(preferredGender)
+                        .child(userID)
+                        .child("connections")
+                        .child("like")
+                        .child(currentUID)
+                        .setValue(true);
+                usersDB.child(preferredGender)
+                        .child(userID)
+                        .child("connections")
+                        .child("dislike")
+                        .child(currentUID)
+                        .removeValue();
+                makeToast(MainActivity.this, "Like!");
             }
 
             @Override
@@ -117,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String oppositeGender;
+    private String preferredGender;
 
     public void checkUserGender() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -131,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getKey().equals(user.getUid())) {
-                    oppositeGender = "Female";
-                    getOppositeGenderUsers();
+                    preferredGender = "Female";
+                    getpreferredGenderUsers();
                 }
             }
 
@@ -166,8 +206,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getKey().equals(user.getUid())) {
-                    oppositeGender = "Male";
-                    getOppositeGenderUsers();
+                    preferredGender = "Male";
+                    getpreferredGenderUsers();
                 }
             }
 
@@ -193,19 +233,39 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getOppositeGenderUsers() {
-        DatabaseReference oppositeGenderDB = FirebaseDatabase
+    public void getpreferredGenderUsers() {
+        DatabaseReference preferredGenderDB = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child("Users")
-                .child(oppositeGender);
-        oppositeGenderDB.addChildEventListener(new ChildEventListener() {
+                .child(preferredGender);
+        preferredGenderDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists()
+                        && !dataSnapshot.child("connections")
+                                .child("dislike")
+                                .hasChild(currentUID)
+                        && !dataSnapshot.child("connections")
+                                .child("like")
+                                .hasChild(currentUID)) {
                     Card item = new Card(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString());
                     rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
+                } else if (dataSnapshot.exists()) {
+                    if (dataSnapshot.child("connections")
+                            .child("like")
+                            .hasChild(currentUID)) {
+                        Card item = new Card(dataSnapshot.getKey(),
+                                "Liked:\n" + dataSnapshot.child("name").getValue().toString());
+                        rowItems.add(item);
+                        arrayAdapter.notifyDataSetChanged();
+                    } else {
+                        Card item = new Card(dataSnapshot.getKey(),
+                                "Disliked:\n" + dataSnapshot.child("name").getValue().toString());
+                        rowItems.add(item);
+                        arrayAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
