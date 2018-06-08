@@ -37,9 +37,9 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageView profileImg;
 
     private FirebaseAuth auth;
-    private DatabaseReference genderDB;
+    private DatabaseReference userDB;
 
-    private String userID, name, phone, profileImgUrl;
+    private String userID, name, phone, profileImgUrl, gender;
 
     private Uri resultUri;
 
@@ -48,7 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        String gender = getIntent().getExtras().getString("gender");
         nameField = findViewById(R.id.name);
         phoneField = findViewById(R.id.phone);
         profileImg = findViewById(R.id.profile);
@@ -56,11 +55,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         userID = auth.getCurrentUser().getUid();
-        genderDB = FirebaseDatabase
+        userDB = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child("Users")
-                .child(gender)
                 .child(userID);
 
         getUserInfo();
@@ -82,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        genderDB.addListenerForSingleValueEvent(new ValueEventListener() {
+        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
@@ -94,6 +92,9 @@ public class SettingsActivity extends AppCompatActivity {
                     if (info.get("phone") != null) {
                         phone = info.get("phone").toString();
                         phoneField.setText(phone);
+                    }
+                    if (info.get("gender") != null) {
+                        gender = info.get("gender").toString();
                     }
                     if (info.get("profileImgUrl") != null) {
                         profileImgUrl = info.get("profileImgUrl").toString();
@@ -119,7 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
         HashMap<String, Object> info = new HashMap<>();
         info.put("name", name);
         info.put("phone", phone);
-        genderDB.updateChildren(info);
+        userDB.updateChildren(info);
 
         if (resultUri != null) {
             final StorageReference filePath = FirebaseStorage
@@ -154,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
                             Uri downloadUrl = uri;
                             HashMap<String, Object> info = new HashMap<>();
                             info.put("profileImgUrl", downloadUrl.toString());
-                            genderDB.updateChildren(info);
+                            userDB.updateChildren(info);
                             finish();
                         }
                     });
@@ -166,6 +167,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
+        //Delete next 2 lines if you don't want to restart MainActivity every time
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

@@ -78,10 +78,10 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 .getInstance()
                                                 .getReference()
                                                 .child("Users")
-                                                .child(genderButton.getText().toString())
                                                 .child(userID);
                                         HashMap<String, Object> info = new HashMap<>();
                                         info.put("name", name);
+                                        info.put("gender", genderButton.getText().toString());
                                         info.put("profileImgUrl", "default");
                                         currentUserDB.setValue(info);
                                     } else {

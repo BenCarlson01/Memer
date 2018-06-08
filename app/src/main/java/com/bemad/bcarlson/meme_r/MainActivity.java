@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
      * Uses Swipecards to get Tinder-like swiping motion
      */
 
-    private Card cardsData[];
     private MyArrayAdapter arrayAdapter;
     private FirebaseAuth auth;
     private DatabaseReference usersDB;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private String gender;
     private String preferredGender;
 
-    private ListView listItems;
     private ArrayList<Card> rowItems;
 
     @Override
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         currentUID = auth.getCurrentUser().getUid();
 
-        checkUserGender();
+        checkUserPreference();
         rowItems = new ArrayList<>();
 
         arrayAdapter = new MyArrayAdapter(this, R.layout.item, rowItems);
@@ -72,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                rowItems.remove(0);
-                arrayAdapter.notifyDataSetChanged();
+                if (!rowItems.isEmpty()) {
+                    rowItems.remove(0);
+                    arrayAdapter.notifyDataSetChanged();
+                }
             }
 
             /**
@@ -86,14 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 //If you want to use it just cast it (String) dataObject
                 Card card = (Card) dataObject;
                 String userID = card.getUserID();
-                usersDB.child(preferredGender)
-                        .child(userID)
+                usersDB.child(userID)
                         .child("connections")
                         .child("like")
                         .child(currentUID)
                         .removeValue();
-                usersDB.child(preferredGender)
-                        .child(userID)
+                usersDB.child(userID)
                         .child("connections")
                         .child("dislike")
                         .child(currentUID)
@@ -108,14 +105,12 @@ public class MainActivity extends AppCompatActivity {
             public void onRightCardExit(Object dataObject) {
                 Card card = (Card) dataObject;
                 String userID = card.getUserID();
-                usersDB.child(preferredGender)
-                        .child(userID)
+                usersDB.child(userID)
                         .child("connections")
                         .child("like")
                         .child(currentUID)
                         .setValue(true);
-                usersDB.child(preferredGender)
-                        .child(userID)
+                usersDB.child(userID)
                         .child("connections")
                         .child("dislike")
                         .child(currentUID)
@@ -152,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void isMatch(String userID) {
         DatabaseReference connectionDB = usersDB
-                .child(gender)
                 .child(currentUID)
                 .child("connections")
                 .child("like")
@@ -162,14 +156,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     makeToast(MainActivity.this, "New Match!");
-                    usersDB.child(preferredGender)
-                            .child(dataSnapshot.getKey())
+                    usersDB.child(dataSnapshot.getKey())
                             .child("connections")
                             .child("matches")
                             .child(currentUID)
                             .setValue(true);
-                    usersDB.child(gender)
-                            .child(currentUID)
+                    usersDB.child(currentUID)
                             .child("connections")
                             .child("matches")
                             .child(dataSnapshot.getKey())
@@ -185,73 +177,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void checkUserGender() {
+    public void checkUserPreference() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DatabaseReference maleDB = FirebaseDatabase
+        DatabaseReference userDB = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child("Users")
-                .child("Male");
-        maleDB.addChildEventListener(new ChildEventListener() {
+                .child(user.getUid());
+        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getKey().equals(user.getUid())) {
-                    gender = "Male";
-                    preferredGender = "Female";
-                    getPreferredGenderUsers();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.child("gender").getValue() != null) {
+                        gender = dataSnapshot.child("gender").getValue().toString();
+                        //add more here for more genders
+                        switch (gender) {
+                            case "Male":
+                                preferredGender = "Female";
+                                break;
+                            case "Female":
+                                preferredGender = "Male";
+                                break;
+                            default:
+                                System.out.println("Non-existent gender");
+                        }
+                        getPreferredGenderUsers();
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        DatabaseReference femaleDB = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child("Users")
-                .child("Female");
-        femaleDB.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getKey().equals(user.getUid())) {
-                    gender = "Female";
-                    preferredGender = "Male";
-                    getPreferredGenderUsers();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -262,36 +215,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getPreferredGenderUsers() {
-        DatabaseReference preferredGenderDB = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child("Users")
-                .child(preferredGender);
-        preferredGenderDB.addChildEventListener(new ChildEventListener() {
+        usersDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()
-                        && !dataSnapshot.child("connections")
+                if (dataSnapshot.exists()) {
+                    if (!dataSnapshot.child("connections")
                                 .child("dislike")
                                 .hasChild(currentUID)
                         && !dataSnapshot.child("connections")
                                 .child("like")
-                                .hasChild(currentUID)) {
-                    String profileImgUrl = "default";
-                    if (!dataSnapshot.child("profileImgUrl").equals("default")) {
-                        profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
-                    }
-                    Card item = new Card(dataSnapshot.getKey(),
-                            dataSnapshot.child("name").getValue().toString(),
-                            profileImgUrl);
-                    rowItems.add(item);
-                    arrayAdapter.notifyDataSetChanged();
-                }
-                //Delete this "else if" if you only want to see each thing once
-                else if (dataSnapshot.exists()) {
-                    if (dataSnapshot.child("connections")
-                            .child("like")
-                            .hasChild(currentUID)) {
+                                .hasChild(currentUID)
+                        //Right now only works for male-female
+                        && dataSnapshot.child("gender")
+                                .getValue()
+                                .toString()
+                                .equals(preferredGender)) {
+                        String profileImgUrl = "default";
+                        if (!dataSnapshot.child("profileImgUrl").equals("default")) {
+                            profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
+                        }
+                        Card item = new Card(dataSnapshot.getKey(),
+                                dataSnapshot.child("name").getValue().toString(),
+                                profileImgUrl);
+                        rowItems.add(item);
+                        arrayAdapter.notifyDataSetChanged();
+                    //Delete this "else if" if you only want to see each thing once
+                    } else if (dataSnapshot.child("connections")
+                                .child("like")
+                                .hasChild(currentUID)
+                            && dataSnapshot.child("gender")
+                                    .getValue()
+                                    .toString()
+                                    .equals(preferredGender)) {
                         String profileImgUrl = "default";
                         if (!dataSnapshot.child("profileImgUrl").equals("default")) {
                             profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
@@ -301,7 +256,10 @@ public class MainActivity extends AppCompatActivity {
                                 profileImgUrl);
                         rowItems.add(item);
                         arrayAdapter.notifyDataSetChanged();
-                    } else {
+                    } else if (dataSnapshot.child("gender")
+                            .getValue()
+                            .toString()
+                            .equals(preferredGender)){
                         String profileImgUrl = "default";
                         if (!dataSnapshot.child("profileImgUrl").equals("default")) {
                             profileImgUrl = dataSnapshot.child("profileImgUrl").getValue().toString();
@@ -350,7 +308,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToSettings(View view) {
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-        intent.putExtra("gender", gender);
         startActivity(intent);
     }
 }
