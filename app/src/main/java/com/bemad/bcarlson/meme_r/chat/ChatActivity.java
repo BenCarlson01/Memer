@@ -1,6 +1,7 @@
 package com.bemad.bcarlson.meme_r.chat;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 
 import com.bemad.bcarlson.meme_r.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,7 +65,7 @@ public class ChatActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler);
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
 
         chatLayoutManager = new LinearLayoutManager(ChatActivity.this);
         recyclerView.setLayoutManager(chatLayoutManager);
@@ -92,6 +94,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     chatID = dataSnapshot.getValue().toString();
                     chatDB = chatDB.child(chatID);
+                    getChatMessages();
                 }
             }
 
@@ -112,5 +115,53 @@ public class ChatActivity extends AppCompatActivity {
             messageDB.setValue(messageMap);
             messageField.setText(null);
         }
+    }
+
+    private void getChatMessages() {
+        chatDB.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists()) {
+                    String message = null;
+                    String createdByUser = null;
+
+                    if (dataSnapshot.child("message").getValue() != null) {
+                        message = dataSnapshot.child("message").getValue().toString();
+                    }
+                    if (dataSnapshot.child("createdByUser").getValue() != null) {
+                        createdByUser = dataSnapshot.child("createdByUser").getValue().toString();
+                    }
+                    if (message != null && createdByUser != null) {
+                        boolean currentUser = false;
+                        if (createdByUser.equals(currentID)) {
+                            currentUser = true;
+                        }
+                        ChatObject newMessage = new ChatObject(message, currentUser);
+                        resultsChat.add(newMessage);
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
