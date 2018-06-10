@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r;
+package com.bemad.bcarlson.meme_r.cards;
 
 /**
  * Created by bcarlson on 6/7/18.
@@ -7,12 +7,12 @@ package com.bemad.bcarlson.meme_r;
 public class Card {
     private String userID;
     private String name;
-    private String profileImageUrl;
+    private String profileImgUrl;
 
     public Card(String userID, String name, String profileImageUrl) {
         this.userID = userID;
         this.name = name;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImgUrl = profileImageUrl;
     }
 
     public String getUserID() {
@@ -31,11 +31,11 @@ public class Card {
         this.name = name;
     }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
+    public String getProfileImgUrl() {
+        return profileImgUrl;
     }
 
-    public void setProfileImageUrlame(String name) {
-        this.name = profileImageUrl;
+    public void setProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
     }
 }
