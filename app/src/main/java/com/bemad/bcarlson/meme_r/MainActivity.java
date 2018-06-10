@@ -157,16 +157,25 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     makeToast(MainActivity.this, "New Match!");
+
+                    String key = FirebaseDatabase
+                            .getInstance()
+                            .getReference()
+                            .child("Chat")
+                            .push()
+                            .getKey();
                     usersDB.child(dataSnapshot.getKey())
                             .child("connections")
                             .child("matches")
                             .child(currentUID)
-                            .setValue(true);
+                            .child("chatID")
+                            .setValue(key);
                     usersDB.child(currentUID)
                             .child("connections")
                             .child("matches")
                             .child(dataSnapshot.getKey())
-                            .setValue(true);
+                            .child("chatID")
+                            .setValue(key);
                 }
             }
 
