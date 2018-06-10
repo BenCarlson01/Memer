@@ -219,7 +219,8 @@ public class MainActivity extends AppCompatActivity {
         usersDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists()
+                        && dataSnapshot.child("gender").getValue() != null) {
                     if (!dataSnapshot.child("connections")
                                 .child("dislike")
                                 .hasChild(currentUID)

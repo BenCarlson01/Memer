@@ -30,8 +30,11 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".matches.MatchesActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".matches.MatchesActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".chat.ChatActivity"
+            android:parentActivityName=".matches.MatchesActivity"/>
     </application>
 
 </manifest>
