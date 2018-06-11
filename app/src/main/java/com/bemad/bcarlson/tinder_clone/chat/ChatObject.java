@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r.chat;
+package com.bemad.bcarlson.tinder_clone.chat;
 
 /**
  * Created by bcarlson on 6/8/18.

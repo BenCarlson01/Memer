@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r;
+package com.bemad.bcarlson.tinder_clone;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

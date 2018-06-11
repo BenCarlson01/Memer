@@ -1,14 +1,13 @@
-package com.bemad.bcarlson.meme_r.chat;
+package com.bemad.bcarlson.tinder_clone.chat;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bemad.bcarlson.meme_r.R;
+import com.bemad.bcarlson.tinder_clone.R;
+import com.bumptech.glide.Glide;
 
 /**
  * Created by bcarlson on 6/8/18.
@@ -17,13 +16,17 @@ import com.bemad.bcarlson.meme_r.R;
 public class ChatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     public TextView messageField;
-    public LinearLayout containerLayout;
+    public ImageView matchImg, userImg;
+    public LinearLayout mainLayout, containerLayout;
 
     public ChatViewHolder(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
 
         messageField = itemView.findViewById(R.id.message);
+        matchImg = itemView.findViewById(R.id.matchImg);
+        userImg = itemView.findViewById(R.id.userImg);
+        mainLayout = itemView.findViewById(R.id.layout);
         containerLayout = itemView.findViewById(R.id.container);
     }
 

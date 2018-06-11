@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r;
+package com.bemad.bcarlson.tinder_clone;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bemad.bcarlson.meme_r.cards.Card;
+import com.bemad.bcarlson.tinder_clone.cards.Card;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

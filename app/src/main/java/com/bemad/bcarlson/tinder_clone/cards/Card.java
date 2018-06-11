@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r.cards;
+package com.bemad.bcarlson.tinder_clone.cards;
 
 /**
  * Created by bcarlson on 6/7/18.

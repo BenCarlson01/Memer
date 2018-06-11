@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bemad.bcarlson.meme_r.LoginActivity"
+    tools:context="com.bemad.bcarlson.tinder_clone.LoginActivity"
     android:orientation="vertical">
 
     <EditText

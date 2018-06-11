@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r;
+package com.bemad.bcarlson.tinder_clone;
 
 import org.junit.Test;
 

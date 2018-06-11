@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.meme_r.matches;
+package com.bemad.bcarlson.tinder_clone.matches;
 
 /**
  * Created by bcarlson on 6/8/18.
