@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.tinder_clone.matches;
+package com.bemad.bcarlson.memer.matches;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bemad.bcarlson.tinder_clone.R;
-import com.bemad.bcarlson.tinder_clone.chat.ChatActivity;
+import com.bemad.bcarlson.memer.chat.ChatActivity;
+import com.bemad.bcarlson.memer.R;
 
 /**
  * Created by bcarlson on 6/8/18.

@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.tinder_clone.matches;
+package com.bemad.bcarlson.memer.matches;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bemad.bcarlson.tinder_clone.R;
+import com.bemad.bcarlson.memer.R;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

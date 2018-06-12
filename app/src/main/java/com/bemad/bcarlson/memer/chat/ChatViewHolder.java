@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.tinder_clone.chat;
+package com.bemad.bcarlson.memer.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -6,8 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bemad.bcarlson.tinder_clone.R;
-import com.bumptech.glide.Glide;
+import com.bemad.bcarlson.memer.R;
 
 /**
  * Created by bcarlson on 6/8/18.

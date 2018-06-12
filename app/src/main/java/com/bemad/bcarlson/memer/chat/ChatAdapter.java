@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.tinder_clone.chat;
+package com.bemad.bcarlson.memer.chat;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bemad.bcarlson.tinder_clone.R;
+import com.bemad.bcarlson.memer.R;
 
 import java.util.ArrayList;
 

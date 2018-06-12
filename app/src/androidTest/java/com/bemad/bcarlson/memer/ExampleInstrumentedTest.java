@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.tinder_clone;
+package com.bemad.bcarlson.memer;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bemad.bcarlson.tinder_clone">
+    package="com.bemad.bcarlson.memer">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="TinderClone"
+        android:label="Memer"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.bemad.bcarlson.tinder_clone.MainActivity"
-            android:parentActivityName="com.bemad.bcarlson.tinder_clone.LoginRegistrationActivity" />
-        <activity android:name="com.bemad.bcarlson.tinder_clone.LoginRegistrationActivity">
+            android:name="com.bemad.bcarlson.memer.MainActivity"
+            android:parentActivityName="com.bemad.bcarlson.memer.LoginRegistrationActivity" />
+        <activity android:name="com.bemad.bcarlson.memer.LoginRegistrationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,19 +22,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bemad.bcarlson.tinder_clone.RegistrationActivity"
-            android:parentActivityName="com.bemad.bcarlson.tinder_clone.LoginRegistrationActivity" />
+            android:name="com.bemad.bcarlson.memer.RegistrationActivity"
+            android:parentActivityName="com.bemad.bcarlson.memer.LoginRegistrationActivity" />
         <activity
-            android:name="com.bemad.bcarlson.tinder_clone.LoginActivity"
-            android:parentActivityName="com.bemad.bcarlson.tinder_clone.LoginRegistrationActivity" />
+            android:name="com.bemad.bcarlson.memer.LoginActivity"
+            android:parentActivityName="com.bemad.bcarlson.memer.LoginRegistrationActivity" />
         <activity
-            android:name="com.bemad.bcarlson.tinder_clone.SettingsActivity"
-            android:parentActivityName="com.bemad.bcarlson.tinder_clone.MainActivity" />
+            android:name="com.bemad.bcarlson.memer.SettingsActivity"
+            android:parentActivityName="com.bemad.bcarlson.memer.MainActivity" />
         <activity
-            android:name="com.bemad.bcarlson.tinder_clone.matches.MatchesActivity"
-            android:parentActivityName="com.bemad.bcarlson.tinder_clone.MainActivity" />
-        <activity android:name="com.bemad.bcarlson.tinder_clone.chat.ChatActivity"
-            android:parentActivityName="com.bemad.bcarlson.tinder_clone.matches.MatchesActivity"/>
+            android:name="com.bemad.bcarlson.memer.matches.MatchesActivity"
+            android:parentActivityName="com.bemad.bcarlson.memer.MainActivity" />
+        <activity android:name="com.bemad.bcarlson.memer.chat.ChatActivity"
+            android:parentActivityName="com.bemad.bcarlson.memer.matches.MatchesActivity"/>
     </application>
 
 </manifest>

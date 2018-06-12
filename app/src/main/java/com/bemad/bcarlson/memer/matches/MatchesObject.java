@@ -1,18 +1,16 @@
-package com.bemad.bcarlson.tinder_clone.cards;
+package com.bemad.bcarlson.memer.matches;
 
 /**
- * Created by bcarlson on 6/7/18.
+ * Created by bcarlson on 6/8/18.
  */
 
-public class Card {
-    private String userID;
-    private String name;
-    private String profileImgUrl;
+public class MatchesObject {
+    private String userID, name, profileImgUrl;
 
-    public Card(String userID, String name, String profileImageUrl) {
+    public MatchesObject(String userID, String name, String profileImgUrl) {
         this.userID = userID;
         this.name = name;
-        this.profileImgUrl = profileImageUrl;
+        this.profileImgUrl = profileImgUrl;
     }
 
     public String getUserID() {
