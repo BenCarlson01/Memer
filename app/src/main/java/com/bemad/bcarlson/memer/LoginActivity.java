@@ -22,13 +22,16 @@ import com.google.firebase.auth.FirebaseUser;
  * New users can go to registration page from here
  * UNIMPLEMENTED - Log in with Facebook and other social media websites
  *  currently can only log in with email and password
+ * UNIMPLEMENTED - Show password option
+ * UNIMPLEMENTED - Keep user logged in
+ *  (as option, currently does automatically and cannot choose otherwise)
  */
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
 
     private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
-        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -100,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        auth.addAuthStateListener(firebaseAuthStateListener);
+        auth.addAuthStateListener(authStateListener);
     }
 
     /**
@@ -109,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        auth.removeAuthStateListener(firebaseAuthStateListener);
+        auth.removeAuthStateListener(authStateListener);
     }
 
     /**
