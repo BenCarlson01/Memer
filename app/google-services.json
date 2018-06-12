@@ -1,39 +1,39 @@
 {
   "project_info": {
-    "project_number": "394486687898",
-    "firebase_url": "https://memer-carlson-ben.firebaseio.com",
-    "project_id": "memer-carlson-ben",
-    "storage_bucket": "memer-carlson-ben.appspot.com"
+    "project_number": "157922497359",
+    "firebase_url": "https://bcarlson-bemad-memer.firebaseio.com",
+    "project_id": "bcarlson-bemad-memer",
+    "storage_bucket": "bcarlson-bemad-memer.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:394486687898:android:e1f6c12a508409dc",
+        "mobilesdk_app_id": "1:157922497359:android:e19273ce4847a725",
         "android_client_info": {
-          "package_name": "com.bemad.bcarlson.meme_r"
+          "package_name": "com.bemad.bcarlson.memer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "394486687898-nhs5m5qak39efmp91jvvleeph2frkq4k.apps.googleusercontent.com",
+          "client_id": "157922497359-pgdf63hljje7tjhun3u87bn1s35lhnp1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.bemad.bcarlson.meme_r",
+            "package_name": "com.bemad.bcarlson.memer",
             "certificate_hash": "a19019f48c3563e310bfcce58f679bae0dfd0000"
           }
         },
         {
-          "client_id": "394486687898-l78t3n59si32punocmvd7v69ogmu30bd.apps.googleusercontent.com",
+          "client_id": "157922497359-m378c5c45nauo9g1pi4qkdrb5ei9ce1n.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "394486687898-l78t3n59si32punocmvd7v69ogmu30bd.apps.googleusercontent.com",
+          "client_id": "157922497359-m378c5c45nauo9g1pi4qkdrb5ei9ce1n.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD0HRt39zDTaLqjh6mI9-qZc2yBEifjE-8"
+          "current_key": "AIzaSyCZ-bo5Uc0RMMKwFwf1-vYR-zOtwqKroQs"
         }
       ],
       "services": {
@@ -44,7 +44,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "394486687898-l78t3n59si32punocmvd7v69ogmu30bd.apps.googleusercontent.com",
+              "client_id": "157922497359-m378c5c45nauo9g1pi4qkdrb5ei9ce1n.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
