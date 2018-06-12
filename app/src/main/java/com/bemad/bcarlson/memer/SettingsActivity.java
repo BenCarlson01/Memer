@@ -167,8 +167,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        //Delete next 2 lines if you don't want to restart MainActivity every time
-        Intent intent = new Intent(this, MainActivity.class);
+        //Delete next 2 lines if you don't want to restart OldMainActivity every time
+        Intent intent = new Intent(this, OldMainActivity.class);
         startActivity(intent);
         finish();
     }

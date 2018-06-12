@@ -35,7 +35,7 @@ public class OldLoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null){
-                    Intent intent = new Intent(OldLoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(OldLoginActivity.this, OldMainActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -65,7 +65,6 @@ public class OldLoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
             }
         });
     }
@@ -83,7 +82,7 @@ public class OldLoginActivity extends AppCompatActivity {
     }
 
     public void backPage(View view) {
-        Intent intent = new Intent(this, LoginRegistrationActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

@@ -12,37 +12,38 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:parentActivityName=".LoginRegistrationActivity" />
-        <activity android:name=".LoginRegistrationActivity"/>
+            android:name=".OldMainActivity"/>
         <activity
-            android:name=".RegistrationActivity"
-            android:parentActivityName=".LoginRegistrationActivity" />
+            android:name=".RegistrationActivity"/>
         <activity
-            android:name=".OldLoginActivity"
-            android:parentActivityName=".LoginRegistrationActivity" />
+            android:name=".OldLoginActivity"/>
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".OldMainActivity" />
         <activity
             android:name=".matches.MatchesActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".OldMainActivity" />
         <activity
             android:name=".chat.ChatActivity"
             android:parentActivityName=".matches.MatchesActivity" />
         <activity
-            android:name=".TestingActivity"
-            android:parentActivityName=".LoginRegistrationActivity" />
-        <activity android:name=".LoginActivity">
+            android:name=".TestingActivity"/>
+        <activity
+            android:name=".LoginActivity"
+            android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"
-            android:parentActivityName=".LoginActivity"/>
-        <activity android:name=".ForgotPasswordActivity"
-            android:parentActivityName=".LoginActivity"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:parentActivityName=".LoginActivity" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:parentActivityName=".LoginActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

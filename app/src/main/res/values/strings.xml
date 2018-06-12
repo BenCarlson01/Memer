@@ -1,9 +1,22 @@
 <resources>
     <string name="app_name">Memer</string>
+
+    <!-- LoginActivity Strings -->
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_button">Login</string>
     <string name="login_forgot_password">Forgot Password?</string>
     <string name="login_register">Don\'t have an account?</string>
-    <string name="login_register_button">Register now!</string>
+    <string name="login_register_button">Register here!</string>
+
+    <!-- RegisterActivity Strings -->
+    <string name="register_username_text">Username</string>
+    <string name="register_username">Please enter preferred username</string>
+    <string name="register_email_text">Email</string>
+    <string name="register_email">Please enter your email</string>
+    <string name="register_password_text">Password</string>
+    <string name="register_password">Please enter your password</string>
+    <string name="register_password_confirm_text">Confirm Password</string>
+    <string name="register_password_confirm">Please re-enter your password\nCurrently not in use</string>
+    <string name="register_button">Create Account!</string>
 </resources>
