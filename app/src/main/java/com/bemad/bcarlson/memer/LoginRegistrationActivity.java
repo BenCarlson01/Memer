@@ -20,7 +20,7 @@ public class LoginRegistrationActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginRegistrationActivity.this, LoginActivity.class);
+                Intent intent = new Intent(LoginRegistrationActivity.this, OldLoginActivity.class);
                 startActivity(intent);
                 //finish();
 
@@ -34,5 +34,14 @@ public class LoginRegistrationActivity extends AppCompatActivity {
                 //finish();
             }
         });
+    }
+
+    /**
+     * Changes activity to TestingActivity
+     * Used by R.id.testingButton
+     */
+    public void toTestingActivity(View view) {
+        Intent intent = new Intent(LoginRegistrationActivity.this, TestingActivity.class);
+        startActivity(intent);
     }
 }

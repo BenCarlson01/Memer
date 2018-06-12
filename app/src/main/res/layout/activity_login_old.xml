@@ -4,27 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bemad.bcarlson.memer.LoginRegistrationActivity"
+    tools:context="com.bemad.bcarlson.memer.OldLoginActivity"
     android:orientation="vertical">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:id="@+id/email"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:id="@+id/password"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
         android:id="@+id/login"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/register"/>
-
-    <!--<Button-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Testing"-->
-        <!--android:id="@+id/testingButton"-->
-        <!--android:onClick="toTestingActivity"/>-->
+        android:text="Cancel"
+        android:onClick="backPage"/>
 
 
 </LinearLayout>

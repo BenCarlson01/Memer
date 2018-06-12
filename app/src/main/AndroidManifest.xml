@@ -12,29 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.bemad.bcarlson.memer.MainActivity"
-            android:parentActivityName="com.bemad.bcarlson.memer.LoginRegistrationActivity" />
-        <activity android:name="com.bemad.bcarlson.memer.LoginRegistrationActivity">
+            android:name=".MainActivity"
+            android:parentActivityName=".LoginRegistrationActivity" />
+        <activity android:name=".LoginRegistrationActivity"/>
+        <activity
+            android:name=".RegistrationActivity"
+            android:parentActivityName=".LoginRegistrationActivity" />
+        <activity
+            android:name=".OldLoginActivity"
+            android:parentActivityName=".LoginRegistrationActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".matches.MatchesActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".chat.ChatActivity"
+            android:parentActivityName=".matches.MatchesActivity" />
+        <activity
+            android:name=".TestingActivity"
+            android:parentActivityName=".LoginRegistrationActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.bemad.bcarlson.memer.RegistrationActivity"
-            android:parentActivityName="com.bemad.bcarlson.memer.LoginRegistrationActivity" />
-        <activity
-            android:name="com.bemad.bcarlson.memer.LoginActivity"
-            android:parentActivityName="com.bemad.bcarlson.memer.LoginRegistrationActivity" />
-        <activity
-            android:name="com.bemad.bcarlson.memer.SettingsActivity"
-            android:parentActivityName="com.bemad.bcarlson.memer.MainActivity" />
-        <activity
-            android:name="com.bemad.bcarlson.memer.matches.MatchesActivity"
-            android:parentActivityName="com.bemad.bcarlson.memer.MainActivity" />
-        <activity android:name="com.bemad.bcarlson.memer.chat.ChatActivity"
-            android:parentActivityName="com.bemad.bcarlson.memer.matches.MatchesActivity"/>
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".LoginActivity"/>
+        <activity android:name=".ForgotPasswordActivity"
+            android:parentActivityName=".LoginActivity"/>
     </application>
 
 </manifest>
