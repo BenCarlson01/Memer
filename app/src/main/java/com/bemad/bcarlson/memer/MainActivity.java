@@ -10,8 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.bemad.bcarlson.memer.cards.Card;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -19,7 +20,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Meme> memeList;
-    private MyArrayAdapter arrayAdapter;
+    private MemeAdapter arrayAdapter;
+
+    private DatabaseReference userDB;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +32,21 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
 
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userDB = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("users")
+                .child(userID);
+
         memeList = new ArrayList<>();
-
-        arrayAdapter = new MyArrayAdapter(this, R.layout.item_meme, memeList);
-
+        arrayAdapter = new MemeAdapter(this, R.layout.item_meme, memeList);
         SwipeFlingAdapterView flingContainer = findViewById(R.id.frame);
-
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
+                // Log.d("LIST", "removed object!");
                 if (!memeList.isEmpty()) {
                     memeList.remove(0);
                     arrayAdapter.notifyDataSetChanged();
@@ -54,18 +61,13 @@ public class MainActivity extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                Card card = (Card) dataObject;
-                String userID = card.getUserID();
-                usersDB.child(userID)
-                        .child("connections")
-                        .child("like")
-                        .child(currentUID)
-                        .removeValue();
-                usersDB.child(userID)
-                        .child("connections")
-                        .child("dislike")
-                        .child(currentUID)
-                        .setValue(true);
+//                Meme card = (Meme) dataObject;
+//                String memeID = card.getMemeID();
+//                userDB.child(userID)
+//                        .child("connections")
+//                        .child("like")
+//                        .child(currentUID)
+//                        .removeValue();
                 Toast.makeText(MainActivity.this, "Dislike!", Toast.LENGTH_SHORT).show();
             }
 
@@ -74,19 +76,19 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onRightCardExit(Object dataObject) {
-                Card card = (Card) dataObject;
-                String userID = card.getUserID();
-                usersDB.child(userID)
-                        .child("connections")
-                        .child("like")
-                        .child(currentUID)
-                        .setValue(true);
-                usersDB.child(userID)
-                        .child("connections")
-                        .child("dislike")
-                        .child(currentUID)
-                        .removeValue();
-                isMatch(userID);
+//                Card card = (Card) dataObject;
+//                String userID = card.getUserID();
+//                usersDB.child(userID)
+//                        .child("connections")
+//                        .child("like")
+//                        .child(currentUID)
+//                        .setValue(true);
+//                usersDB.child(userID)
+//                        .child("connections")
+//                        .child("dislike")
+//                        .child(currentUID)
+//                        .removeValue();
+//                isMatch(userID);
                 Toast.makeText(MainActivity.this, "Like!", Toast.LENGTH_SHORT).show();
             }
 
@@ -134,11 +136,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.main_action_settings:
+            case R.id.main_toolbar_add_meme:
+                intent = new Intent(this, AddMemeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.main_toolbar_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.main_action_signout:
+            case R.id.main_toolbar_signout:
                 FirebaseAuth.getInstance().signOut();
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);

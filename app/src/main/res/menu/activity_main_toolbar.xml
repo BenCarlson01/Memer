@@ -2,17 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Settings - always be in the overflow -->
-    <item android:id="@+id/main_action_settings"
+    <!-- Create Meme - always be in the overflow -->
+    <item android:id="@+id/main_toolbar_add_meme"
         android:icon="@mipmap/ic_launcher"
-        android:title="@string/main_action_settings"
+        android:title="@string/main_toolbar_add_meme"
+        app:showAsAction="never"/>
+
+    <!-- Settings - always be in the overflow -->
+    <item android:id="@+id/main_toolbar_settings"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/main_toolbar_settings"
         app:showAsAction="never"/>
 
     <!-- Sign Out -  should appear as action button if possible -->
     <item
-        android:id="@+id/main_action_signout"
+        android:id="@+id/main_toolbar_signout"
         android:icon="@mipmap/ic_launcher"
-        android:title="@string/main_action_signout"
+        android:title="@string/main_toolbar_signout"
         app:showAsAction="never"/>
 
 

@@ -5,35 +5,26 @@ package com.bemad.bcarlson.memer;
  */
 
 public class Meme {
-    private String username, ;
+    private String memeID, memeUrl;
 
-    public Meme(String userID, String name, String profileImageUrl) {
-        this.userID = userID;
-        this.name = name;
-        this.profileImgUrl = profileImageUrl;
+    public Meme(String memeID, String memeUrl) {
+        this.memeID = memeID;
+        this.memeUrl = memeUrl;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getMemeID() {
+        return memeID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setMemeID(String memeID) {
+        this.memeID = memeID;
     }
 
-    public String getName() {
-        return name;
+    public String getMemeUrl() {
+        return memeUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProfileImgUrl() {
-        return profileImgUrl;
-    }
-
-    public void setProfileImgUrl(String profileImgUrl) {
-        this.profileImgUrl = profileImgUrl;
+    public void setMemeUrl(String memeUrl) {
+        this.memeUrl = memeUrl;
     }
 }

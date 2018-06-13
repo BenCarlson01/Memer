@@ -22,8 +22,14 @@
     <string name="register_button">Create Account!</string>
 
     <!-- MainActivity Strings -->
-    <string name="main_action_settings">Settings</string>
-    <string name="main_action_signout">Sign Out</string>
+    <string name="main_toolbar_add_meme">Add Meme</string>
+    <string name="main_toolbar_settings">Settings</string>
+    <string name="main_toolbar_signout">Sign Out</string>
+
+    <!-- AddMemeActivity Strings -->
+    <string name="add_meme_description_text">Desription</string>
+    <string name="add_meme_description">Enter a desription of your meme here</string>
+    <string name="add_meme_button">Add Meme</string>
 
     <!-- Array of all countries -->
     <string-array name="countries_array">
