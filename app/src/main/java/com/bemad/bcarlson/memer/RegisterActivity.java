@@ -91,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         .child(userID);
                                 HashMap<String, Object> userInfo = new HashMap<>();
                                 userInfo.put("username", username);
+                                userInfo.put("country", country);
                                 //userInfo.put("email", email); etc.
                                 userInfo.put("profile_image", "default");
                                 currentUserDB.setValue(userInfo);
