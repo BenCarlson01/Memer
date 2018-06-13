@@ -318,7 +318,7 @@ public class OldMainActivity extends AppCompatActivity {
     }
 
     public void goToSettings(View view) {
-        Intent intent = new Intent(OldMainActivity.this, SettingsActivity.class);
+        Intent intent = new Intent(OldMainActivity.this, OldSettingsActivity.class);
         startActivity(intent);
     }
 

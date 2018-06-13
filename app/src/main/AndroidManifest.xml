@@ -10,15 +10,12 @@
         android:label="Memer"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".OldMainActivity" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".OldLoginActivity" />
         <activity
-            android:name=".OldMainActivity"/>
-        <activity
-            android:name=".RegistrationActivity"/>
-        <activity
-            android:name=".OldLoginActivity"/>
-        <activity
-            android:name=".SettingsActivity"
+            android:name=".OldSettingsActivity"
             android:parentActivityName=".OldMainActivity" />
         <activity
             android:name=".matches.MatchesActivity"
@@ -26,8 +23,7 @@
         <activity
             android:name=".chat.ChatActivity"
             android:parentActivityName=".matches.MatchesActivity" />
-        <activity
-            android:name=".TestingActivity"/>
+        <activity android:name=".TestingActivity" />
         <activity
             android:name=".LoginActivity"
             android:label="Login">
@@ -43,7 +39,10 @@
         <activity
             android:name=".ForgotPasswordActivity"
             android:parentActivityName=".LoginActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity"
+            android:parentActivityName=".LoginActivity"/>
+        <activity android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

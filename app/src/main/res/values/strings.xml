@@ -21,6 +21,10 @@
     <string name="register_password_confirm">Please re-enter your password\nCurrently not in use</string>
     <string name="register_button">Create Account!</string>
 
+    <!-- MainActivity Strings -->
+    <string name="main_action_settings">Settings</string>
+    <string name="main_action_signout">Sign Out</string>
+
     <!-- Array of all countries -->
     <string-array name="countries_array">
         <item>United States</item>
