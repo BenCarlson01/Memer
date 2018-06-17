@@ -1,6 +1,8 @@
 package com.bemad.bcarlson.memer;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,8 +12,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -21,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Meme> memeList;
     private MemeAdapter arrayAdapter;
 
-    private DatabaseReference userDB;
-    private String userID;
+    private DatabaseReference userDB, memeDB;
+    private String userID, userCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
                 .getReference()
                 .child("users")
                 .child(userID);
+        userCountry = getIntent().getStringExtra("userCountry");
+        System.out.println("3: " + userCountry + " !");
+        memeDB = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("country")
+                .child(userCountry)
+                .child("memes");
 
         memeList = new ArrayList<>();
         arrayAdapter = new MemeAdapter(this, R.layout.item_meme, memeList);
@@ -60,13 +73,12 @@ public class MainActivity extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-//                Meme card = (Meme) dataObject;
-//                String memeID = card.getMemeID();
-//                userDB.child(userID)
-//                        .child("connections")
-//                        .child("like")
-//                        .child(currentUID)
-//                        .removeValue();
+                Meme meme = (Meme) dataObject;
+                memeDB.child(meme.getMemeID())
+                        .child("dislike")
+                        .setValue(userID);
+                userDB.child("seen")
+                        .child(meme.getMemeID());
                 Toast.makeText(MainActivity.this, "Dislike!", Toast.LENGTH_SHORT).show();
             }
 
@@ -75,19 +87,12 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onRightCardExit(Object dataObject) {
-//                Card card = (Card) dataObject;
-//                String userID = card.getUserID();
-//                usersDB.child(userID)
-//                        .child("connections")
-//                        .child("like")
-//                        .child(currentUID)
-//                        .setValue(true);
-//                usersDB.child(userID)
-//                        .child("connections")
-//                        .child("dislike")
-//                        .child(currentUID)
-//                        .removeValue();
-//                isMatch(userID);
+                Meme meme = (Meme) dataObject;
+                memeDB.child(meme.getMemeID())
+                        .child("like")
+                        .setValue(userID);
+                userDB.child("seen")
+                        .child(meme.getMemeID());
                 Toast.makeText(MainActivity.this, "Like!", Toast.LENGTH_SHORT).show();
             }
 
@@ -115,6 +120,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getNewMemes();
+
+    }
+
+    /**
+     * Loads new memes into ArrayAdapter for the user to view
+     * UNIMPLEMENTED - Users can only view memes that they haven't seen before
+     * UNIMPLEMENTED - Users only load at most 100 or some number of memes at a time
+     */
+    private void getNewMemes() {
+        memeDB.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists()) {
+                    Meme meme = new Meme(dataSnapshot.getKey(),
+                            dataSnapshot.child("download").getValue().toString());
+                    memeList.add(meme);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

@@ -30,12 +30,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
 /**
  * Activity where a user can add their memes
  * UNIMPLEMENTED - Allow users to create memes in app
+ * UNIMPLEMENTED - Checks if similar memes have been made before
+ *  SUB-UNIMPLEMENTED - Checks if the exact same meme has been made before in that country
+ *   Checks if memeID already exists, hash of combination of userCountry and meme byteMap
  */
 public class SubmitMemeActivity extends AppCompatActivity {
     
@@ -110,25 +114,6 @@ public class SubmitMemeActivity extends AppCompatActivity {
             return;
         }
 
-        DateFormat dateTimeFormat = SimpleDateFormat.getDateTimeInstance();
-        Calendar cal = Calendar.getInstance();
-        final String createdOn = dateTimeFormat.format(cal.getTime());
-        final String description = memeDescription.getText().toString();
-        final String memeID = Hasher.hash(userID + userCountry
-                + createdOn + description);
-        final DatabaseReference memeDB = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child("country")
-                .child(userCountry)
-                .child("memes")
-                .child(memeID);
-        final StorageReference memeStoragePath = FirebaseStorage
-                .getInstance()
-                .getReference()
-                .child(userCountry)
-                .child(memeID);
-
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media
@@ -139,6 +124,18 @@ public class SubmitMemeActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
+
+        DateFormat dateTimeFormat = SimpleDateFormat.getDateTimeInstance();
+        Calendar cal = Calendar.getInstance();
+        final String createdOn = dateTimeFormat.format(cal.getTime());
+        final String description = memeDescription.getText().toString();
+        final String memeID = Hasher.hash(userCountry + Arrays.toString(data));
+        final StorageReference memeStoragePath = FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("memes")
+                .child(memeID);
+
         UploadTask uploadTask = memeStoragePath.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -159,8 +156,12 @@ public class SubmitMemeActivity extends AppCompatActivity {
                         memeInfo.put("username", username);
                         memeInfo.put("description", description);
                         memeInfo.put("created", createdOn);
-                        memeDB.updateChildren(memeInfo);
-
+                        FirebaseDatabase
+                                .getInstance()
+                                .getReference()
+                                .child("memes")
+                                .child(memeID)
+                                .updateChildren(memeInfo);
                         userDB.child("memes").child(memeID);
                         finish();
                     }

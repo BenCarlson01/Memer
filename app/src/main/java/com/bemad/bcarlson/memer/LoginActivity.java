@@ -2,6 +2,7 @@ package com.bemad.bcarlson.memer;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 /**
  * Activity to log a user in
@@ -24,11 +33,12 @@ import com.google.firebase.auth.FirebaseUser;
  *  currently can only log in with email and password
  * UNIMPLEMENTED - Show password option
  * UNIMPLEMENTED - Keep user logged in
- *  (as option, currently does automatically and cannot choose otherwise)
  */
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
+    private String userCountry;
+    private boolean updated;
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -39,17 +49,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null){
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        };
+//        authStateListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                if (user != null){
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
+//        };
 
         emailField = findViewById(R.id.loginEmailField);
         passwordField = findViewById(R.id.loginPasswordField);
@@ -69,7 +78,53 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (!task.isSuccessful()){
+                                if (task.isSuccessful()) {
+                                    System.out.println("0");
+                                    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    userCountry = "";
+                                    updated = false;
+                                    DatabaseReference userDB = FirebaseDatabase.getInstance()
+                                            .getReference()
+                                            .child("users")
+                                            .child(userID);
+                                    userDB.addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                            if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                                                HashMap<String, Object> info = (HashMap) dataSnapshot.getValue();
+                                                if (info.get("country") != null) {
+                                                    System.out.println("1");
+                                                    userCountry = info.get("country").toString();
+                                                    updated = true;
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                    System.out.println("2");
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("userCountry", userCountry);
+                                    startActivity(intent);
+                                } else {
                                     FirebaseAuthException e = (FirebaseAuthException) task.getException();
                                     Toast.makeText(LoginActivity.this,
                                             "Login Error: " + e.getMessage(),
@@ -95,25 +150,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Adds a state listener to Firebase authenticator on application start to check for:
-     *  a successful login,
-     *  a currently logged in user
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        auth.addAuthStateListener(authStateListener);
-    }
-
-    /**
-     * Removes state listener from Firebase authenticator on activity finish
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        auth.removeAuthStateListener(authStateListener);
-    }
+//    /**
+//     * Adds a state listener to Firebase authenticator on application start to check for:
+//     *  a successful login,
+//     *  a currently logged in user
+//     */
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        auth.addAuthStateListener(authStateListener);
+//    }
+//
+//    /**
+//     * Removes state listener from Firebase authenticator on activity finish
+//     */
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        auth.removeAuthStateListener(authStateListener);
+//    }
 
     /**
      * Changes activity to RegisterActivity
@@ -122,4 +177,8 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Collects the users data
+     */
 }
