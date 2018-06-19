@@ -48,7 +48,7 @@ public class SubmitMemeActivity extends AppCompatActivity {
     private Uri memeImageUri;
 
     private String userID, username, userCountry, userProfileImageUrl;
-    private long memeCount;
+    private long num_memes, num_seen;
     private DatabaseReference userDB;
 
     @Override
@@ -66,37 +66,29 @@ public class SubmitMemeActivity extends AppCompatActivity {
                 .getReference()
                 .child("users")
                 .child(userID);
-        System.out.println("111111111111111111111111111111\n" +
-                "111111111111111111111111111111\n" +
-                "111111111111111111111111111111\n" +
-                "111111111111111111111111111111\n" +
-                "111111111111111111111111111111");
         userDB.addListenerForSingleValueEvent(new ValueEventListener() {
             /**
              * Stores relevant user info into local variables to save with meme
              */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println("1111" + userID);
                 if (dataSnapshot.exists()) {
-                    System.out.println("Further");
                     HashMap<String, Object> userInfo = (HashMap) dataSnapshot.getValue();
                     if (userInfo.get("username") != null) {
                         username = userInfo.get("username").toString();
                     }
-                    System.out.println(username);
                     if (userInfo.get("country") != null) {
                         userCountry = userInfo.get("country").toString();
                     }
-                    System.out.println(userCountry);
-                    if (userInfo.get("memeCount") != null) {
-                        memeCount = (long) userInfo.get("memeCount");
+                    if (userInfo.get("num_memes") != null) {
+                        num_memes = (long) userInfo.get("num_memes");
                     }
-                    System.out.println(memeCount);
+                    if (userInfo.get("num_seen") != null) {
+                        num_seen = (long) userInfo.get("num_seen");
+                    }
                     if (userInfo.get("profile_image") != null) {
                         userProfileImageUrl = userInfo.get("profile_image").toString();
                     }
-                    System.out.println(userProfileImageUrl);
                 }
             }
 
@@ -166,13 +158,14 @@ public class SubmitMemeActivity extends AppCompatActivity {
                 memeStoragePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        System.out.println("2222" + userID);
                         HashMap<String, Object> memeInfo = new HashMap<>();
                         memeInfo.put("download", uri.toString());
                         memeInfo.put("user", userID);
                         memeInfo.put("username", username);
                         memeInfo.put("description", description);
                         memeInfo.put("created", createdOn);
+                        memeInfo.put("num_likes", 0);
+                        memeInfo.put("num_dislikes", 0);
                         FirebaseDatabase
                                 .getInstance()
                                 .getReference()
@@ -182,11 +175,15 @@ public class SubmitMemeActivity extends AppCompatActivity {
                                 .child(memeID)
                                 .updateChildren(memeInfo);
                         userDB.child("memes")
-                                .child("" + memeCount)
+                                .child("" + num_memes)
                                 .setValue(memeID);
-                        memeCount += 1;
-                        userDB.child("memeCount")
-                                .setValue(memeCount);
+                        userDB.child("num_memes")
+                                .setValue(num_memes + 1);
+                        userDB.child("seen")
+                                .child("" + num_seen)
+                                .setValue(memeID);
+                        userDB.child("num_memes")
+                                .setValue(num_seen + 1);
                         finish();
                     }
                 });

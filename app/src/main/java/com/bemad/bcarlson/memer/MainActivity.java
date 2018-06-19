@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,11 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
                 Meme meme = (Meme) dataObject;
-                memeDB.child(meme.getMemeID())
-                        .child("dislike")
-                        .setValue(userID);
-                userDB.child("seen")
-                        .child(meme.getMemeID());
+                updateMemeDatabase("dislikes", meme);
                 Toast.makeText(MainActivity.this, "Dislike!", Toast.LENGTH_SHORT).show();
             }
 
@@ -81,11 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRightCardExit(Object dataObject) {
                 Meme meme = (Meme) dataObject;
-                memeDB.child(meme.getMemeID())
-                        .child("like")
-                        .setValue(userID);
-                userDB.child("seen")
-                        .child(meme.getMemeID());
+                updateMemeDatabase("likes", meme);
                 Toast.makeText(MainActivity.this, "Like!", Toast.LENGTH_SHORT).show();
             }
 
@@ -165,6 +158,55 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /**
+     * Updates meme's likes/dislikes in its database location
+     * Made this method because I didn't want to type the same thing twice
+     *
+     * @param type: must be "like" or "dislike" - determines if updating likes or dislikes
+     * @param meme: Meme that we are updating
+     */
+    private void updateMemeDatabase(final String type, final Meme meme) {
+        memeDB.child(meme.getMemeID())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            long count = (long) dataSnapshot.child("num_" + type).getValue();
+                            memeDB.child(meme.getMemeID())
+                                    .child(type)
+                                    .child("" + count)
+                                    .setValue(userID);
+                            memeDB.child(meme.getMemeID())
+                                    .child("num_" + type)
+                                    .setValue(count + 1);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    long count = (long) dataSnapshot.child("num_seen").getValue();
+                    userDB.child("seen")
+                            .child("" + count)
+                            .setValue(meme.getMemeID());
+                    userDB.child("num_seen")
+                            .setValue(count + 1);
                 }
             }
 

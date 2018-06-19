@@ -92,7 +92,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 HashMap<String, Object> userInfo = new HashMap<>();
                                 userInfo.put("username", username);
                                 userInfo.put("country", country);
-                                userInfo.put("memeCount", 0);
+                                userInfo.put("num_memes", 0);
+                                userInfo.put("num_seen", 0);
                                 //userInfo.put("email", email); etc.
                                 userInfo.put("profile_image", "default");
                                 currentUserDB.setValue(userInfo);
