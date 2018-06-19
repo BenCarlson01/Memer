@@ -45,7 +45,8 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SubmitMemeActivity"></activity>
+        <activity android:name=".SubmitMemeActivity" />
+        <activity android:name=".MemeClickActivity"></activity>
     </application>
 
 </manifest>

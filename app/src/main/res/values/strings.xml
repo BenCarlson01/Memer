@@ -42,6 +42,11 @@
     <string name="settings_gender_text">Gender: </string>
     <string name="settings_language_text">Preferred Language: </string>
 
+    <!-- MemeClickActivity -->
+    <string name="meme_click_description_text">Description</string>
+    <string name="meme_click_created_by_text">Created By:</string>
+    <string name="meme_click_created_on_text"> on </string>
+
     <!-- Array of all countries -->
     <string-array name="countries_array">
         <item>United States</item>
