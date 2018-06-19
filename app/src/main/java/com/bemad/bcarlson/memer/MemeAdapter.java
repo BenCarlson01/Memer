@@ -29,6 +29,7 @@ public class MemeAdapter extends ArrayAdapter<Meme> {
         }
 
         ImageView image = convertView.findViewById(R.id.image);
+        System.out.println("Meme URL: " + meme.getMemeUrl());
         Glide.with(convertView.getContext()).load(meme.getMemeUrl()).into(image);
         return convertView;
     }

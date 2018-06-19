@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Memer</string>
+    <string name="input">Fill Out</string>
+    <string name="change">change</string>
 
     <!-- LoginActivity Strings -->
     <string name="login_email">Email</string>
@@ -30,6 +32,15 @@
     <string name="add_meme_description_text">Desription</string>
     <string name="add_meme_description">Enter a desription of your meme here</string>
     <string name="add_meme_button">Add Meme</string>
+
+    <!-- SettingsActivity Strings -->
+    <string name="settings_profile_picture">Profile Picture</string>
+    <string name="settings_username_text">Username: </string>
+    <string name="settings_country_text">Country of Residence: </string>
+    <string name="settings_age_text">Age: </string>
+    <string name="settings_age">Enter your Age</string>
+    <string name="settings_gender_text">Gender: </string>
+    <string name="settings_language_text">Preferred Language: </string>
 
     <!-- Array of all countries -->
     <string-array name="countries_array">

@@ -42,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 .getReference()
                 .child("users")
                 .child(userID);
-        userCountry = getIntent().getStringExtra("userCountry");
-        System.out.println("3: " + userCountry + " !");
-        memeDB = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("country")
-                .child(userCountry)
-                .child("memes");
 
         memeList = new ArrayList<>();
         arrayAdapter = new MemeAdapter(this, R.layout.item_meme, memeList);
@@ -111,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
@@ -119,9 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
             }
         });
-
         getNewMemes();
-
     }
 
     /**
@@ -130,30 +120,52 @@ public class MainActivity extends AppCompatActivity {
      * UNIMPLEMENTED - Users only load at most 100 or some number of memes at a time
      */
     private void getNewMemes() {
-        memeDB.addChildEventListener(new ChildEventListener() {
+        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println("Enter: " + dataSnapshot.toString());
                 if (dataSnapshot.exists()) {
-                    Meme meme = new Meme(dataSnapshot.getKey(),
-                            dataSnapshot.child("download").getValue().toString());
-                    memeList.add(meme);
-                    arrayAdapter.notifyDataSetChanged();
+                    System.out.println("Enter if: " + dataSnapshot.toString());
+                    String userCountry = dataSnapshot.child("country").getValue().toString();
+                    memeDB = FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child("country")
+                            .child(userCountry)
+                            .child("memes");
+                    memeDB.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            System.out.println("Enter: " + dataSnapshot.toString());
+                            if (dataSnapshot.exists()) {
+                                System.out.println("Enter if: " + dataSnapshot.toString());
+                                Meme meme = new Meme(dataSnapshot.getKey(),
+                                        dataSnapshot.child("download").getValue().toString());
+                                memeList.add(meme);
+                                arrayAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override

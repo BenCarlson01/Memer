@@ -37,8 +37,6 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
-    private String userCountry;
-    private boolean updated;
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -79,50 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    System.out.println("0");
-                                    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                    userCountry = "";
-                                    updated = false;
-                                    DatabaseReference userDB = FirebaseDatabase.getInstance()
-                                            .getReference()
-                                            .child("users")
-                                            .child(userID);
-                                    userDB.addChildEventListener(new ChildEventListener() {
-                                        @Override
-                                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                            if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                                                HashMap<String, Object> info = (HashMap) dataSnapshot.getValue();
-                                                if (info.get("country") != null) {
-                                                    System.out.println("1");
-                                                    userCountry = info.get("country").toString();
-                                                    updated = true;
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                    System.out.println("2");
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("userCountry", userCountry);
                                     startActivity(intent);
                                 } else {
                                     FirebaseAuthException e = (FirebaseAuthException) task.getException();
