@@ -9,7 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bemad.bcarlson.memer.Hasher;
 import com.bemad.bcarlson.memer.R;
 import com.bemad.bcarlson.memer.chat.ChatActivity;
 import com.bemad.bcarlson.memer.chat.ChatAdapter;
@@ -22,7 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class MemeClickActivity extends AppCompatActivity {
@@ -33,18 +40,20 @@ public class MemeClickActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager commentLayoutManager;
     private ArrayList<CommentObject> comments = new ArrayList<>();
 
-    private EditText messageField;
+    private LinearLayout commentLayout;
+    private EditText commentField;
     private Button sendButton;
 
-    private String userID, chatID;
+    private String userID, memeID;
 
     private DatabaseReference commentDB, userDB, chatDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_meme_click);
 
+        memeID = getIntent().getStringExtra("memeID");
         userID = FirebaseAuth.getInstance()
                 .getCurrentUser()
                 .getUid();
@@ -73,59 +82,56 @@ public class MemeClickActivity extends AppCompatActivity {
                     }
                 });
 
-        getChatID();
-
         recyclerView = findViewById(R.id.recycler);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
 
-        chatLayoutManager = new LinearLayoutManager(ChatActivity.this);
-        recyclerView.setLayoutManager(chatLayoutManager);
+        commentLayoutManager = new LinearLayoutManager(MemeClickActivity.this);
+        recyclerView.setLayoutManager(commentLayoutManager);
 
-        chatAdapter = new ChatAdapter(getDataSetChat(), ChatActivity.this);
-        recyclerView.setAdapter(chatAdapter);
+        commentAdapter = new CommentAdapter(getDataSetChat(), MemeClickActivity.this);
+        recyclerView.setAdapter(commentAdapter);
 
-        messageField = findViewById(R.id.message);
-        sendButton = findViewById(R.id.send);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        TextView commentText = findViewById(R.id.memeClickAddComment);
+        commentText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                commentLayout = findViewById(R.id.memeClickSendLayout);
+                commentLayout.setVisibility(View.VISIBLE);
+                commentField = findViewById(R.id.memeClickComment);
+                ImageView commentButton = findViewById(R.id.memeClickCommentButton);
+                commentButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        submitComment();
+                    }
+                });
             }
         });
     }
 
-    private ArrayList<ChatObject> getDataSetChat() {
-        return resultsChat;
+    private ArrayList<CommentObject> getDataSetChat() {
+        return comments;
     }
 
-    private void getChatID() {
-        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    chatID = dataSnapshot.getValue().toString();
-                    chatDB = chatDB.child(chatID);
-                    getChatMessages();
-                }
-            }
+    private void submitComment() {
+        String comment = commentField.getText().toString();
+        if (!comment.isEmpty()) {
+            DateFormat dateTimeFormat = SimpleDateFormat.getDateTimeInstance();
+            Calendar cal = Calendar.getInstance();
+            final String createdOn = dateTimeFormat.format(cal.getTime());
+            String commentID = Hasher.hash(comment + createdOn + userID + memeID);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            DatabaseReference commentInfo = commentDB.child(commentID);
+            HashMap<String, Object> info = new HashMap<>();
+            info.put("user", userID);
+            info.put("comment", comment);
+            info.put("num_likes", 0);
+            info.put("num_dislikes", 0);
+            commentInfo.setValue(info);
 
-            }
-        });
-    }
-
-    private void sendMessage() {
-        String message = messageField.getText().toString();
-        if (!message.isEmpty()) {
-            DatabaseReference messageDB = chatDB.push();
-            HashMap<String, String> messageMap = new HashMap<>();
-            messageMap.put("createdByUser", currentID);
-            messageMap.put("message", message);
-            messageDB.setValue(messageMap);
-            messageField.setText(null);
+            commentField.setText(null);
+            commentLayout.setVisibility(View.GONE);
         }
     }
 

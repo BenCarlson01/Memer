@@ -48,7 +48,48 @@
             android:layout_height="wrap_content"
             android:text="@string/input"/>
     </LinearLayout>
+    <TextView
+        android:id="@+id/memeClickAddComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sendLayout"
+        android:text="@string/meme_click_comment_text"
+        android:textColor="#3333FF"/>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler"
+                android:scrollbars="vertical"/>
+        </android.support.v4.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/memeClickSendLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <EditText
+                android:id="@+id/memeClickComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"/>
+            <ImageView
+                android:id="@+id/memeClickCommentButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:layout_gravity="center"
+                android:src="@drawable/comment"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

@@ -46,6 +46,7 @@
     <string name="meme_click_description_text">Description</string>
     <string name="meme_click_created_by_text">Created By:</string>
     <string name="meme_click_created_on_text"> on </string>
+    <string name="meme_click_comment_text">Add a Comment</string>
 
     <!-- Array of all countries -->
     <string-array name="countries_array">

@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.bemad.bcarlson.memer.comments.MemeClickActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -97,11 +98,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(MainActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, MemeClickActivity.class);
+                Meme meme = (Meme) dataObject;
+                intent.putExtra("memeID", meme.getMemeID());
+                startActivity(intent);
             }
         });
         getNewMemes();
