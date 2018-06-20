@@ -1,4 +1,4 @@
-package com.bemad.bcarlson.memer.chat;
+package com.bemad.bcarlson.memer.comments;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.bemad.bcarlson.memer.R;
-import com.bumptech.glide.Glide;
+import com.bemad.bcarlson.memer.chat.ChatActivity;
+import com.bemad.bcarlson.memer.chat.ChatAdapter;
+import com.bemad.bcarlson.memer.chat.ChatObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,44 +25,53 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChatActivity extends AppCompatActivity {
+public class MemeClickActivity extends AppCompatActivity {
+
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter chatAdapter;
-    private RecyclerView.LayoutManager chatLayoutManager;
-    private ArrayList<ChatObject> resultsChat = new ArrayList<>();
+    private RecyclerView.Adapter commentAdapter;
+    private RecyclerView.LayoutManager commentLayoutManager;
+    private ArrayList<CommentObject> comments = new ArrayList<>();
 
     private EditText messageField;
     private Button sendButton;
 
-    private String currentID, matchID, chatID;
+    private String userID, chatID;
 
-    private DatabaseReference userDB, chatDB;
+    private DatabaseReference commentDB, userDB, chatDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        currentID = FirebaseAuth.getInstance()
+        userID = FirebaseAuth.getInstance()
                 .getCurrentUser()
                 .getUid();
-        matchID = getIntent()
-                .getExtras()
-                .getString("matchID");
-        userDB = FirebaseDatabase
-                .getInstance()
+        FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Users")
-                .child(currentID)
-                .child("connections")
-                .child("matches")
-                .child(matchID)
-                .child("chatID");
-        chatDB = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child("Chat");
+                .child("users")
+                .child(userID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null) {
+                            commentDB = FirebaseDatabase.getInstance()
+                                    .getReference()
+                                    .child("country")
+                                    .child(dataSnapshot.child("country").getValue().toString())
+                                    .child("memes")
+                                    .child(memeID)
+                                    .child("comments");
+                            getComments();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
         getChatID();
 
@@ -118,28 +129,23 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void getChatMessages() {
-        chatDB.addChildEventListener(new ChildEventListener() {
+    private void getComments() {
+        commentDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.exists()) {
-                    String message = null;
-                    String createdByUser = null;
-
-                    if (dataSnapshot.child("message").getValue() != null) {
-                        message = dataSnapshot.child("message").getValue().toString();
-                    }
-                    if (dataSnapshot.child("createdByUser").getValue() != null) {
-                        createdByUser = dataSnapshot.child("createdByUser").getValue().toString();
-                    }
-                    if (message != null && createdByUser != null) {
-                        boolean currentUser = false;
-                        if (createdByUser.equals(currentID)) {
-                            currentUser = true;
-                        }
-                        ChatObject newMessage = new ChatObject(message, currentUser);
-                        resultsChat.add(newMessage);
-                        chatAdapter.notifyDataSetChanged();
+                    String commentID = dataSnapshot.getKey();
+                    DataSnapshot commentData = dataSnapshot.child(commentID);
+                    if (commentData.exists() && commentData.getChildrenCount() > 0) {
+                        HashMap<String, Object> info = (HashMap) commentData.getValue();
+                        String commentUserID = info.get("user").toString();
+                        String comment = info.get("comment").toString();
+                        long numLikes = (long) info.get("num_likes");
+                        long numDislikes = (long) info.get("num_dislikes");
+                        CommentObject newComment = new CommentObject(
+                                commentUserID, comment, numLikes, numDislikes);
+                        comments.add(newComment);
+                        commentAdapter.notifyDataSetChanged();
                     }
                 }
             }
