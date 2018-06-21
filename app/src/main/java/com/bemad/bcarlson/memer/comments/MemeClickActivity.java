@@ -72,7 +72,42 @@ public class MemeClickActivity extends AppCompatActivity {
                                     .child("memes")
                                     .child(memeID)
                                     .child("comments");
-                            getComments();
+                            commentDB.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                                        HashMap<String, Object> info = (HashMap) dataSnapshot.getValue();
+                                        String commentUserID = info.get("user").toString();
+                                        String comment = info.get("comment").toString();
+                                        long numLikes = (long) info.get("num_likes");
+                                        long numDislikes = (long) info.get("num_dislikes");
+                                        CommentObject newComment = new CommentObject(
+                                                commentUserID, comment, numLikes, numDislikes);
+                                        comments.add(newComment);
+                                        commentAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
 
@@ -133,48 +168,5 @@ public class MemeClickActivity extends AppCompatActivity {
             commentField.setText(null);
             commentLayout.setVisibility(View.GONE);
         }
-    }
-
-    private void getComments() {
-        commentDB.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
-                    String commentID = dataSnapshot.getKey();
-                    DataSnapshot commentData = dataSnapshot.child(commentID);
-                    if (commentData.exists() && commentData.getChildrenCount() > 0) {
-                        HashMap<String, Object> info = (HashMap) commentData.getValue();
-                        String commentUserID = info.get("user").toString();
-                        String comment = info.get("comment").toString();
-                        long numLikes = (long) info.get("num_likes");
-                        long numDislikes = (long) info.get("num_dislikes");
-                        CommentObject newComment = new CommentObject(
-                                commentUserID, comment, numLikes, numDislikes);
-                        comments.add(newComment);
-                        commentAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }

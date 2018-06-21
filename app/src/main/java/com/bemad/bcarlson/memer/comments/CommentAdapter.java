@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bemad.bcarlson.memer.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -38,13 +39,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
-        CommentViewHolder rcv = new CommentViewHolder(layoutView);
-        return rcv;
+        return new CommentViewHolder(layoutView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         holder.commentField.setText(commentList.get(position).getComment());
+        String likes = "" + commentList.get(position).getLikes();
+        holder.likesField.setText(likes);
+        String dislikes = "" + commentList.get(position).getLikes();
+        holder.dislikesField.setText(dislikes);
+        Glide.with(context)
+                .load(R.mipmap.ic_launcher)
+                .into(holder.commentImage);
     }
 
     @Override

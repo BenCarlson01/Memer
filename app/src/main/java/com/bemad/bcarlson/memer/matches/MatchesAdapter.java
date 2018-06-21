@@ -36,8 +36,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesViewHolder>{
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
-        MatchesViewHolder rcv = new MatchesViewHolder(layoutView);
-        return rcv;
+        return new MatchesViewHolder(layoutView);
     }
 
     @Override
