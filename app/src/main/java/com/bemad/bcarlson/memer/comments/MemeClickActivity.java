@@ -57,65 +57,65 @@ public class MemeClickActivity extends AppCompatActivity {
         userID = FirebaseAuth.getInstance()
                 .getCurrentUser()
                 .getUid();
-        FirebaseDatabase.getInstance()
+        userDB = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("users")
-                .child(userID)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null) {
-                            commentDB = FirebaseDatabase.getInstance()
-                                    .getReference()
-                                    .child("country")
-                                    .child(dataSnapshot.child("country").getValue().toString())
-                                    .child("memes")
-                                    .child(memeID)
-                                    .child("comments");
-                            commentDB.addChildEventListener(new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                                        HashMap<String, Object> info = (HashMap) dataSnapshot.getValue();
-                                        String commentUserID = info.get("user").toString();
-                                        String comment = info.get("comment").toString();
-                                        long numLikes = (long) info.get("num_likes");
-                                        long numDislikes = (long) info.get("num_dislikes");
-                                        CommentObject newComment = new CommentObject(
-                                                commentUserID, comment, numLikes, numDislikes);
-                                        comments.add(newComment);
-                                        commentAdapter.notifyDataSetChanged();
-                                    }
+                .child(userID);
+        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null) {
+                        commentDB = FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child("country")
+                                .child(dataSnapshot.child("country").getValue().toString())
+                                .child("memes")
+                                .child(memeID)
+                                .child("comments");
+                        commentDB.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                                    HashMap<String, Object> info = (HashMap) dataSnapshot.getValue();
+                                    String commentUserID = info.get("user").toString();
+                                    String comment = info.get("comment").toString();
+                                    long numLikes = (long) info.get("num_likes");
+                                    long numDislikes = (long) info.get("num_dislikes");
+                                    CommentObject newComment = new CommentObject(commentUserID, comment,
+                                            dataSnapshot.getKey(), numLikes, numDislikes, commentDB);
+                                    comments.add(newComment);
+                                    commentAdapter.notifyDataSetChanged();
                                 }
+                            }
 
-                                @Override
-                                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                }
-                            });
-                        }
+                            }
+                        });
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                }
+        });
 
         recyclerView = findViewById(R.id.recycler);
         recyclerView.setNestedScrollingEnabled(false);
@@ -124,7 +124,7 @@ public class MemeClickActivity extends AppCompatActivity {
         commentLayoutManager = new LinearLayoutManager(MemeClickActivity.this);
         recyclerView.setLayoutManager(commentLayoutManager);
 
-        commentAdapter = new CommentAdapter(getDataSetChat(), MemeClickActivity.this);
+        commentAdapter = new CommentAdapter(getDataSetChat(), MemeClickActivity.this, userDB);
         recyclerView.setAdapter(commentAdapter);
 
         TextView commentText = findViewById(R.id.memeClickAddComment);
