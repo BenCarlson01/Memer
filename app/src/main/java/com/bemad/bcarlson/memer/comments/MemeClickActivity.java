@@ -69,7 +69,10 @@ public class MemeClickActivity extends AppCompatActivity {
         userDB.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null) {
+                    if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null
+                            && dataSnapshot.child("profile_image").getValue() != null) {
+                        final String profileImage = dataSnapshot.child("profile_image")
+                                .getValue().toString();
                         DatabaseReference memeDB = FirebaseDatabase.getInstance()
                                 .getReference()
                                 .child("country")
@@ -105,7 +108,7 @@ public class MemeClickActivity extends AppCompatActivity {
                                     long numLikes = (long) info.get("num_likes");
                                     long numDislikes = (long) info.get("num_dislikes");
                                     CommentObject newComment = new CommentObject(commentUserID, comment,
-                                            dataSnapshot.getKey(), numLikes, numDislikes, commentDB);
+                                            dataSnapshot.getKey(), profileImage, numLikes, numDislikes, commentDB);
                                     comments.add(newComment);
                                     commentAdapter.notifyDataSetChanged();
                                 }

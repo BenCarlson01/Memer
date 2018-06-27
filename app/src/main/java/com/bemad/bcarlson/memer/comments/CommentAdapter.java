@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bemad.bcarlson.memer.Helper;
 import com.bemad.bcarlson.memer.R;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -59,6 +60,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
         holder.likesField.setText(likes);
         String dislikes = "" + comment.getDislikes();
         holder.dislikesField.setText(dislikes);
+        new Helper.DownloadImageTask(holder.commentImage).execute(comment.getUserImage());
         Glide.with(context)
                 .load(R.mipmap.ic_launcher)
                 .into(holder.commentImage);

@@ -9,15 +9,16 @@ import com.google.firebase.database.DatabaseReference;
 
 public class CommentObject {
 
-    private String userID, comment, commentID, react;
+    private String userID, comment, commentID, userImage, react;
     private long likes, dislikes;
     private DatabaseReference db;
 
     public CommentObject(String userID, String comment, String commentID,
-            long likes, long dislikes, DatabaseReference db) {
+            String userImage, long likes, long dislikes, DatabaseReference db) {
         this.userID = userID;
         this.comment = comment;
         this.commentID = commentID;
+        this.userImage = userImage;
         this.likes = likes;
         this.dislikes = dislikes;
         this.db = db;
@@ -70,5 +71,9 @@ public class CommentObject {
 
     public String getReact() {
         return react;
+    }
+
+    public String getUserImage() {
+        return userImage;
     }
 }
