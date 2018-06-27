@@ -41,6 +41,7 @@
     <string name="settings_age">Enter your Age</string>
     <string name="settings_gender_text">Gender: </string>
     <string name="settings_language_text">Preferred Language: </string>
+    <string name="settings_confirm_button_text">Confirm?</string>
 
     <!-- MemeClickActivity -->
     <string name="meme_click_description_text">Description</string>

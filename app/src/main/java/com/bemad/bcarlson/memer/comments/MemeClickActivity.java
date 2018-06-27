@@ -13,11 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bemad.bcarlson.memer.Hasher;
+import com.bemad.bcarlson.memer.Helper;
 import com.bemad.bcarlson.memer.R;
-import com.bemad.bcarlson.memer.chat.ChatActivity;
-import com.bemad.bcarlson.memer.chat.ChatAdapter;
-import com.bemad.bcarlson.memer.chat.ChatObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +40,10 @@ public class MemeClickActivity extends AppCompatActivity {
     private LinearLayout commentLayout;
     private EditText commentField;
     private Button sendButton;
+    private ImageView memeImage;
+    private TextView memeDescription, memeCreatedBy, memeCreatedOn;
 
-    private String userID, memeID;
+    private String userID, memeID, country;
 
     private DatabaseReference commentDB, userDB, chatDB;
 
@@ -61,17 +60,41 @@ public class MemeClickActivity extends AppCompatActivity {
                 .getReference()
                 .child("users")
                 .child(userID);
+
+        memeImage = findViewById(R.id.memeClickMeme);
+        memeDescription = findViewById(R.id.memeClickDescriptionText);
+        memeCreatedBy = findViewById(R.id.memeClickCreatedBy);
+        memeCreatedOn = findViewById(R.id.memeClickCreatedOn);
+
         userDB.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null) {
-                        commentDB = FirebaseDatabase.getInstance()
+                        DatabaseReference memeDB = FirebaseDatabase.getInstance()
                                 .getReference()
                                 .child("country")
                                 .child(dataSnapshot.child("country").getValue().toString())
                                 .child("memes")
-                                .child(memeID)
-                                .child("comments");
+                                .child(memeID);
+                        memeDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                new Helper.DownloadImageTask(memeImage).execute(dataSnapshot
+                                        .child("download").getValue().toString());
+                                memeDescription.setText(dataSnapshot
+                                        .child("description").getValue().toString());
+                                memeCreatedBy.setText(dataSnapshot
+                                        .child("username").getValue().toString());
+                                memeCreatedOn.setText(dataSnapshot
+                                        .child("created").getValue().toString());
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        commentDB = memeDB.child("comments");
                         commentDB.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -155,7 +178,7 @@ public class MemeClickActivity extends AppCompatActivity {
             DateFormat dateTimeFormat = SimpleDateFormat.getDateTimeInstance();
             Calendar cal = Calendar.getInstance();
             final String createdOn = dateTimeFormat.format(cal.getTime());
-            String commentID = Hasher.hash(comment + createdOn + userID + memeID);
+            String commentID = Helper.hash(comment + createdOn + userID + memeID);
 
             DatabaseReference commentInfo = commentDB.child(commentID);
             HashMap<String, Object> info = new HashMap<>();

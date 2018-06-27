@@ -57,22 +57,29 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
         holder.commentField.setText(comment.getComment());
         String likes = "" + comment.getLikes();
         holder.likesField.setText(likes);
-        String dislikes = "" + comment.getLikes();
+        String dislikes = "" + comment.getDislikes();
         holder.dislikesField.setText(dislikes);
         Glide.with(context)
                 .load(R.mipmap.ic_launcher)
                 .into(holder.commentImage);
         comment.setReact("none");
-        userDB.child("likes").orderByKey().equalTo(comment.getCommentID()).addListenerForSingleValueEvent(
-                new ValueEventListener() {
+        userDB.child("comment_reacts").orderByKey().equalTo(comment.getCommentID())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            if (dataSnapshot.getValue().toString().equals("liked")) {
+                            Iterable<DataSnapshot> it = dataSnapshot.getChildren();
+                            String react = "none";
+                            for (DataSnapshot ds : it) {
+                                react = ds.getValue().toString();
+                            }
+                            if (react.equals("liked")) {
+                                System.out.println("Entered liked");
                                 comment.setReact("liked");
                                 holder.likesButton.setImageDrawable(ContextCompat
                                         .getDrawable(context, R.drawable.thumbs_up_full));
-                            } else if (dataSnapshot.getValue().toString().equals("disliked")) {
+                            } else if (react.equals("disliked")) {
+                                System.out.println("Entered disliked");
                                 comment.setReact("disliked");
                                 holder.dislikesButton.setImageDrawable(ContextCompat
                                         .getDrawable(context, R.drawable.thumbs_down_full));
@@ -94,17 +101,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
                 DatabaseReference commentDB = comment.getDB();
                 switch (comment.getReact()) {
                     case "disliked":
-                        commentDB.child("num_dislikes").setValue(comment.getDislikes() - 1);
-                        String dislikes = "" + (comment.getDislikes() - 1);
+                        System.out.println("Liked, but originally disliked");
+                        commentDB.child(comment.getCommentID()).child("num_dislikes")
+                                .setValue(comment.getDislikes() - 1);
+                        comment.setDislikes(comment.getDislikes() - 1);
+                        String dislikes = "" + (comment.getDislikes());
                         holder.dislikesField.setText(dislikes);
                         holder.dislikesButton.setImageDrawable(ContextCompat
                                 .getDrawable(context, R.drawable.thumbs_down_empty));
-                        break;
                     case "none":
-                        commentDB.child("num_likes").setValue(comment.getLikes() + 1);
-                        userDB.child("likes").child(comment.getCommentID())
+                        System.out.println("Liked, but originally none");
+                        comment.setReact("liked");
+                        commentDB.child(comment.getCommentID()).child("num_likes")
+                                .setValue(comment.getLikes() + 1);
+                        userDB.child("comment_reacts").child(comment.getCommentID())
                                 .setValue("liked");
-                        String likes = "" + (comment.getLikes() + 1);
+                        comment.setLikes(comment.getLikes() + 1);
+                        String likes = "" + (comment.getLikes());
                         holder.likesField.setText(likes);
                         holder.likesButton.setImageDrawable(ContextCompat
                                 .getDrawable(context, R.drawable.thumbs_up_full));
@@ -123,17 +136,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
                 DatabaseReference commentDB = comment.getDB();
                 switch (comment.getReact()) {
                     case "liked":
-                        commentDB.child("num_likes").setValue(comment.getLikes() - 1);
-                        String likes = "" + (comment.getLikes() - 1);
+                        System.out.println("Disliked, but originally liked");
+                        commentDB.child(comment.getCommentID()).child("num_likes")
+                                .setValue(comment.getLikes() - 1);
+                        comment.setLikes(comment.getLikes() - 1);
+                        String likes = "" + (comment.getLikes());
                         holder.likesField.setText(likes);
                         holder.likesButton.setImageDrawable(ContextCompat
                                 .getDrawable(context, R.drawable.thumbs_up_empty));
-                        break;
                     case "none":
-                        commentDB.child("num_dislikes").setValue(comment.getDislikes() + 1);
-                        userDB.child("likes").child(comment.getCommentID())
+                        System.out.println("Disliked, but originally none");
+                        comment.setReact("disliked");
+                        commentDB.child(comment.getCommentID()).child("num_dislikes")
+                                .setValue(comment.getDislikes() + 1);
+                        userDB.child("comment_reacts").child(comment.getCommentID())
                                 .setValue("disliked");
-                        String dislikes = "" + (comment.getDislikes() + 1);
+                        comment.setDislikes(comment.getDislikes() + 1);
+                        String dislikes = "" + (comment.getDislikes());
                         holder.dislikesField.setText(dislikes);
                         holder.dislikesButton.setImageDrawable(ContextCompat
                                 .getDrawable(context, R.drawable.thumbs_down_full));

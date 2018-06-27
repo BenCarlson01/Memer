@@ -136,7 +136,7 @@ public class SubmitMemeActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         final String createdOn = dateTimeFormat.format(cal.getTime());
         final String description = memeDescription.getText().toString();
-        final String memeID = Hasher.hash(userCountry + Arrays.toString(data) + createdOn);
+        final String memeID = Helper.hash(userCountry + Arrays.toString(data) + createdOn);
         final StorageReference memeStoragePath = FirebaseStorage
                 .getInstance()
                 .getReference()

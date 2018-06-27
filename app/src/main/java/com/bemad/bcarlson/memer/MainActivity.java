@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.main_toolbar_settings:
                 intent = new Intent(this, SettingsActivity.class);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
                 break;
             case R.id.main_toolbar_signout:
