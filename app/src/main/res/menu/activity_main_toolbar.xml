@@ -14,6 +14,12 @@
         android:title="@string/main_toolbar_settings"
         app:showAsAction="never"/>
 
+    <!-- Friends - always be in the overflow -->
+    <item android:id="@+id/main_toolbar_friends"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/main_toolbar_friends"
+        app:showAsAction="never"/>
+
     <!-- Sign Out -  should appear as action button if possible -->
     <item
         android:id="@+id/main_toolbar_signout"

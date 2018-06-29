@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.bemad.bcarlson.memer.comments.MemeClickActivity;
+import com.bemad.bcarlson.memer.friends.FriendsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -245,6 +245,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.main_toolbar_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 intent.putExtra("userID", userID);
+                startActivity(intent);
+                break;
+            case R.id.main_toolbar_friends:
+                intent = new Intent(this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.main_toolbar_signout:

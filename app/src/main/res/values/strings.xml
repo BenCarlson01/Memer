@@ -26,6 +26,7 @@
     <!-- MainActivity Strings -->
     <string name="main_toolbar_add_meme">Add Meme</string>
     <string name="main_toolbar_settings">Settings</string>
+    <string name="main_toolbar_friends">Friends</string>
     <string name="main_toolbar_signout">Sign Out</string>
 
     <!-- SubmitMemeActivity Strings -->
@@ -44,10 +45,17 @@
     <string name="settings_confirm_button_text">Confirm?</string>
 
     <!-- MemeClickActivity -->
-    <string name="meme_click_description_text">Description</string>
+    <string name="meme_click_description_text"><u>Description</u></string>
     <string name="meme_click_created_by_text">Created By:</string>
     <string name="meme_click_created_on_text"> on </string>
     <string name="meme_click_comment_text">Add a Comment</string>
+    <string name="meme_click_popular_comments">Popular Comments</string>
+    <string name="meme_click_recent_comments">Recent Comments</string>
+
+    <!-- FriendsActivity -->
+    <string name="friends_search_bar">Enter a friend\'s name</string>
+    <string name="friends_text"><u>Friends</u></string>
+    <string name="friends_add_friends_text">Add Friends</string>
 
     <!-- Array of all countries -->
     <string-array name="countries_array">

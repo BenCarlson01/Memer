@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bemad.bcarlson.memer.Helper;
 import com.bemad.bcarlson.memer.R;
@@ -22,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,7 +44,7 @@ public class MemeClickActivity extends AppCompatActivity {
     private EditText commentField;
     private Button sendButton;
     private ImageView memeImage;
-    private TextView memeDescription, memeCreatedBy, memeCreatedOn;
+    private TextView memeDescription, memeCreated;
 
     private String userID, memeID, country, profileImage;
 
@@ -64,8 +67,7 @@ public class MemeClickActivity extends AppCompatActivity {
 
         memeImage = findViewById(R.id.memeClickMeme);
         memeDescription = findViewById(R.id.memeClickDescriptionText);
-        memeCreatedBy = findViewById(R.id.memeClickCreatedBy);
-        memeCreatedOn = findViewById(R.id.memeClickCreatedOn);
+        memeCreated = findViewById(R.id.memeClickCreated);
 
         userDB.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -87,10 +89,12 @@ public class MemeClickActivity extends AppCompatActivity {
                                         .child("download").getValue().toString());
                                 memeDescription.setText(dataSnapshot
                                         .child("description").getValue().toString());
-                                memeCreatedBy.setText(dataSnapshot
-                                        .child("username").getValue().toString());
-                                memeCreatedOn.setText(dataSnapshot
-                                        .child("created").getValue().toString());
+                                //Probably want to use strings.xml
+                                String created = "Created by: "
+                                        + dataSnapshot.child("username").getValue().toString()
+                                        + " on "
+                                        + dataSnapshot.child("created").getValue().toString();
+                                memeCreated.setText(created);
                             }
 
                             @Override
@@ -169,6 +173,29 @@ public class MemeClickActivity extends AppCompatActivity {
                         submitComment();
                     }
                 });
+            }
+        });
+
+        TextView popularButton = findViewById(R.id.memeClickPopular);
+        popularButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Changes order of visible comments to be in order of highest like - dislike amount
+             */
+             @Override
+             public void onClick(View v) {
+                 //Write something
+                 Toast.makeText(MemeClickActivity.this, "WIP", Toast.LENGTH_SHORT).show();
+             }
+        });
+        TextView recentButton = findViewById(R.id.memeClickRecent);
+        recentButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Changes order of comments to be in order of most recent
+             */
+            @Override
+            public void onClick(View v) {
+                //Write something
+                Toast.makeText(MemeClickActivity.this, "WIP", Toast.LENGTH_SHORT).show();
             }
         });
     }

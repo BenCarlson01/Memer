@@ -25,8 +25,7 @@
             android:parentActivityName=".matches.MatchesActivity" />
         <activity android:name=".TestingActivity" />
         <activity
-            android:name=".LoginActivity"
-            android:label="Login">
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,10 +44,17 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SubmitMemeActivity"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".comments.MemeClickActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".SubmitMemeActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".comments.MemeClickActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".friends.FriendsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".friends.AddFriendActivity"
+            android:parentActivityName=".friends.FriendsActivity"/>
     </application>
 
 </manifest>
