@@ -4,45 +4,48 @@
     android:padding="5dp"
     android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/friendsFriend"
+        android:id="@+id/addFriendsFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
+        <!-- User Profile Picture -->
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/friendsImage"
             android:layout_width="40sp"
             android:layout_height="40sp"
-            android:src="@mipmap/ic_launcher_round"
             android:layout_marginStart="3sp"
             android:layout_marginEnd="1sp"
+            android:layout_gravity="center"
+            android:paddingStart="0dp"
+            android:paddingEnd="5dp"
             app:civ_border_width="1sp"
-            app:civ_border_color="#FF000000"/>
-
+            app:civ_border_color="#FF000000"
+            android:src="@mipmap/ic_launcher_round"/>
         <!-- Friends username or name? -->
         <TextView
-            android:id="@+id/friendsName"
+            android:id="@+id/addFriendsName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/input"/>
     </LinearLayout>
-
     <Space
-    android:layout_width="0dp"
-    android:layout_height="1dp"
-    android:layout_weight="1"
-    android:layout_gravity="center"/>
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"/>
     <ImageView
-    android:id="@+id/addFriendsButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@drawable/comment"/>
+        android:id="@+id/addFriendsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/add_friend"/>
     <Space
-    android:layout_width="0dp"
-    android:layout_height="1dp"
-    android:layout_weight="0.1"
-    android:layout_gravity="center"/>
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="0.1"
+        android:layout_gravity="center"/>
+
 
 </LinearLayout>

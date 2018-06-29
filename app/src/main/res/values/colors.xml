@@ -7,4 +7,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey_white">#44FFFFFF</color>
     <color name="blue_button">#3333FF</color>
+    <color name="purple_button">"#FF2727DD"</color>
 </resources>

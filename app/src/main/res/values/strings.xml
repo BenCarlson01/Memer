@@ -56,6 +56,7 @@
     <string name="friends_search_bar">Enter a friend\'s name</string>
     <string name="friends_text"><u>Friends</u></string>
     <string name="friends_add_friends_text">Add Friends</string>
+    <string name="friends_enter_name">Enter friend\'s username or full name</string>
 
     <!-- Array of all countries -->
     <string-array name="countries_array">
