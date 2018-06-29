@@ -60,9 +60,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
         holder.likesField.setText(likes);
         String dislikes = "" + comment.getDislikes();
         holder.dislikesField.setText(dislikes);
-        new Helper.DownloadImageTask(holder.commentImage).execute(comment.getUserImage());
+        //new Helper.DownloadImageTask(holder.commentImage).execute(comment.getUserImage());
         Glide.with(context)
-                .load(R.mipmap.ic_launcher)
+                .load(comment.getUserImage())
                 .into(holder.commentImage);
         comment.setReact("none");
         userDB.child("comment_reacts").orderByKey().equalTo(comment.getCommentID())

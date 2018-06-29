@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,8 +36,8 @@ public class MemeAdapter extends ArrayAdapter<Meme>{
 
         ImageView image = convertView.findViewById(R.id.image);
         System.out.println("Meme URL: " + meme.getMemeUrl());
-        new Helper.DownloadImageTask(image).execute(meme.getMemeUrl());
-        //Glide.with(convertView.getContext()).load(meme.getMemeUrl()).into(image);
+        //new Helper.DownloadImageTask(image).execute(meme.getMemeUrl());
+        Glide.with(convertView.getContext()).load(meme.getMemeUrl()).into(image);
         return convertView;
     }
 }

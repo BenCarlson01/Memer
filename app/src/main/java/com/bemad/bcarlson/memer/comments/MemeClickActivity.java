@@ -43,7 +43,7 @@ public class MemeClickActivity extends AppCompatActivity {
     private ImageView memeImage;
     private TextView memeDescription, memeCreatedBy, memeCreatedOn;
 
-    private String userID, memeID, country;
+    private String userID, memeID, country, profileImage;
 
     private DatabaseReference commentDB, userDB, chatDB;
 
@@ -52,6 +52,7 @@ public class MemeClickActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_click);
 
+        profileImage = "default";
         memeID = getIntent().getStringExtra("memeID");
         userID = FirebaseAuth.getInstance()
                 .getCurrentUser()
@@ -71,7 +72,7 @@ public class MemeClickActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists() && dataSnapshot.child("country").getValue() != null
                             && dataSnapshot.child("profile_image").getValue() != null) {
-                        final String profileImage = dataSnapshot.child("profile_image")
+                        profileImage = dataSnapshot.child("profile_image")
                                 .getValue().toString();
                         DatabaseReference memeDB = FirebaseDatabase.getInstance()
                                 .getReference()
@@ -107,8 +108,9 @@ public class MemeClickActivity extends AppCompatActivity {
                                     String comment = info.get("comment").toString();
                                     long numLikes = (long) info.get("num_likes");
                                     long numDislikes = (long) info.get("num_dislikes");
+                                    String image = info.get("image").toString();
                                     CommentObject newComment = new CommentObject(commentUserID, comment,
-                                            dataSnapshot.getKey(), profileImage, numLikes, numDislikes, commentDB);
+                                            dataSnapshot.getKey(), image, numLikes, numDislikes, commentDB);
                                     comments.add(newComment);
                                     commentAdapter.notifyDataSetChanged();
                                 }
@@ -186,6 +188,7 @@ public class MemeClickActivity extends AppCompatActivity {
             DatabaseReference commentInfo = commentDB.child(commentID);
             HashMap<String, Object> info = new HashMap<>();
             info.put("user", userID);
+            info.put("image", profileImage);
             info.put("comment", comment);
             info.put("num_likes", 0);
             info.put("num_dislikes", 0);
